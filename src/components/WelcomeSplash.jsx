@@ -14,8 +14,7 @@ export function WelcomeSplash({ onEnterApp }) {
         {/* Animated Brand Badge */}
         <div className="splash-brand-badge">
           <div className="splash-logo-container">
-            <span className="splash-flag">🇵🇭</span>
-            <span className="splash-palm">🌴</span>
+            <img src="/app-logo.png" alt="TagalogHebrew Whale Shark Logo" className="splash-logo-img" />
             <span className="splash-ring"></span>
           </div>
           <div className="splash-brand-titles">
