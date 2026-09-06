@@ -21,7 +21,7 @@ export const Navbar = ({
       {/* Brand Title Section */}
       <div className="navbar-brand" onClick={() => setCurrentTab('syllabus')}>
         <div className="brand-logo-wrapper">
-          <span className="brand-flag">🇵🇭</span>
+          <img src="/app-logo.png" alt="TagalogHebrew Whale Shark Logo" className="brand-logo-img" />
           <span className="brand-shine"></span>
         </div>
         <div className="brand-titles">
