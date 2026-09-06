@@ -1,5 +1,6 @@
 import React from 'react';
 import { Play, Sparkles, Compass, ShieldCheck } from 'lucide-react';
+import appLogo from '../assets/app-logo.png';
 import './WelcomeSplash.css';
 
 export function WelcomeSplash({ onEnterApp }) {
@@ -14,7 +15,7 @@ export function WelcomeSplash({ onEnterApp }) {
         {/* Animated Brand Badge */}
         <div className="splash-brand-badge">
           <div className="splash-logo-container">
-            <img src="/app-logo.png" alt="TagalogHebrew Whale Shark Logo" className="splash-logo-img" />
+            <img src={appLogo} alt="TagalogHebrew Whale Shark Logo" className="splash-logo-img" />
             <span className="splash-ring"></span>
           </div>
           <div className="splash-brand-titles">

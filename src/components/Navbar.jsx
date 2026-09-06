@@ -1,5 +1,6 @@
 import React from 'react';
 import { Moon, Sun, Smartphone, Monitor, User } from 'lucide-react';
+import appLogo from '../assets/app-logo.png';
 import './Navbar.css';
 
 export const Navbar = ({ 
@@ -21,7 +22,7 @@ export const Navbar = ({
       {/* Brand Title Section */}
       <div className="navbar-brand" onClick={() => setCurrentTab('syllabus')}>
         <div className="brand-logo-wrapper">
-          <img src="/app-logo.png" alt="TagalogHebrew Whale Shark Logo" className="brand-logo-img" />
+          <img src={appLogo} alt="TagalogHebrew Whale Shark Logo" className="brand-logo-img" />
           <span className="brand-shine"></span>
         </div>
         <div className="brand-titles">
