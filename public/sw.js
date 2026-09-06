@@ -1,4 +1,4 @@
-const CACHE_NAME = 'tagalog-hebrew-v3';
+const CACHE_NAME = 'tagalog-hebrew-v4';
 
 self.addEventListener('install', (event) => {
   self.skipWaiting();
