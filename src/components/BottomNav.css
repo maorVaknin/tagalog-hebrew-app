@@ -1,0 +1,138 @@
+/* iOS Bottom Navigation Bar Styles */
+
+.bottom-nav-container {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 1rem calc(0.5rem + env(safe-area-inset-bottom, 0px)) 1rem;
+  pointer-events: none;
+}
+
+.bottom-nav-glass {
+  pointer-events: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 100%;
+  max-width: 450px;
+  height: 64px;
+  background: rgba(15, 23, 42, 0.82);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 28px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35),
+              0 0 1px rgba(255, 255, 255, 0.2) inset;
+  padding: 0 0.5rem;
+  direction: rtl;
+}
+
+.theme-light .bottom-nav-glass {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+.bottom-nav-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  height: 100%;
+  min-height: 48px; /* High Touch Target */
+  background: transparent;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 6px 0;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.theme-light .bottom-nav-item {
+  color: #64748b;
+}
+
+.bottom-nav-item .icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.bottom-nav-label {
+  font-size: 0.72rem;
+  font-weight: 500;
+  margin-top: 3px;
+  transition: color 0.2s ease;
+}
+
+.bottom-nav-item:hover {
+  color: #cbd5e1;
+}
+
+.bottom-nav-item.active {
+  color: #38bdf8;
+}
+
+.theme-light .bottom-nav-item.active {
+  color: #0284c7;
+}
+
+.bottom-nav-item.active .icon-wrapper {
+  transform: translateY(-2px) scale(1.1);
+}
+
+.active-dot-indicator {
+  position: absolute;
+  bottom: 6px;
+  width: 4px;
+  height: 4px;
+  background-color: #38bdf8;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #38bdf8;
+}
+
+.theme-light .active-dot-indicator {
+  background-color: #0284c7;
+  box-shadow: 0 0 6px #0284c7;
+}
+
+/* Inside Mobile Simulator: absolute bottom inside screen container */
+.iphone-screen .bottom-nav-container {
+  position: absolute;
+  bottom: 20px;
+  left: 12px;
+  right: 12px;
+  width: auto;
+  padding: 0;
+}
+
+.iphone-screen .bottom-nav-glass {
+  max-width: 100%;
+  height: 60px;
+  border-radius: 22px;
+}
+
+/* Desktop Floating Bottom Nav styling */
+@media (min-width: 769px) {
+  .app-main-wrapper:not(.is-simulator-active) > .bottom-nav-container {
+    bottom: 24px;
+  }
+
+  .app-main-wrapper:not(.is-simulator-active) .bottom-nav-glass {
+    max-width: 540px;
+    height: 68px;
+    border-radius: 34px;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4),
+                0 0 1px rgba(255, 255, 255, 0.25) inset;
+  }
+}
+

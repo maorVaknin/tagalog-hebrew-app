@@ -1,0 +1,272 @@
+/* Welcome Splash Screen Styles with Ultra-Sheer Glass & Clear Background */
+
+.welcome-splash-wrapper {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  overflow: hidden;
+  direction: rtl;
+  user-select: none;
+}
+
+/* Background Image Container - Fully Visible & Vibrant */
+.splash-bg-image {
+  position: absolute;
+  inset: 0;
+  background-image: url('/images/splash_bg.png');
+  background-size: cover;
+  background-position: center;
+  transform: scale(1.05);
+  animation: splash-bg-reveal 1s ease-out forwards, splash-zoom 20s infinite alternate ease-in-out 1s;
+}
+
+@keyframes splash-bg-reveal {
+  0% { opacity: 0; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+@keyframes splash-zoom {
+  0% { transform: scale(1.05); }
+  100% { transform: scale(1.12); }
+}
+
+/* Ultra-light subtle overlay to keep image fully bright and clear */
+.splash-overlay-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.12) 0%, rgba(2, 6, 23, 0.35) 100%);
+  animation: overlay-fade 1.2s ease-out forwards;
+}
+
+@keyframes overlay-fade {
+  0% { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+/* Ultra-Sheer Crystal Glass Card Container */
+.splash-glass-card {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 480px;
+  padding: 2.25rem 2rem;
+  background: rgba(15, 23, 42, 0.28); /* Highly Transparent Glass */
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 36px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
+              0 0 1px rgba(255, 255, 255, 0.4) inset;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1.5rem;
+  color: #ffffff;
+  animation: card-float-entrance 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s backwards;
+}
+
+@keyframes card-float-entrance {
+  0% {
+    opacity: 0;
+    transform: translateY(50px) scale(0.92);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+/* Brand Badge & Animated Logo */
+.splash-brand-badge {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.splash-logo-container {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  border-radius: 28px;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.4) 0%, rgba(56, 189, 248, 0.4) 100%);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  animation: logo-float 3s ease-in-out infinite 1.5s;
+}
+
+@keyframes logo-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(-2deg); }
+}
+
+.splash-flag {
+  font-size: 2.5rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.splash-palm {
+  font-size: 2.2rem;
+  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
+}
+
+.splash-ring {
+  position: absolute;
+  inset: -6px;
+  border-radius: 32px;
+  border: 2px solid #10b981;
+  animation: pulse-ring-logo 2s infinite 1.5s;
+  pointer-events: none;
+}
+
+@keyframes pulse-ring-logo {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.15); opacity: 0; }
+}
+
+.splash-brand-titles {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.splash-main-title {
+  font-family: 'Outfit', 'Rubik', sans-serif;
+  font-size: 2.1rem;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ffffff;
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.7);
+}
+
+.splash-highlight {
+  background: linear-gradient(135deg, #34d399 0%, #38bdf8 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.8));
+}
+
+.splash-pro-chip {
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  padding: 3px 8px;
+  border-radius: 8px;
+  background: rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+  border: 1px solid rgba(251, 191, 36, 0.6);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.splash-sub-title {
+  font-size: 0.95rem;
+  color: #ffffff;
+  font-weight: 600;
+  margin-top: 4px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
+}
+
+/* Feature Pills Row */
+.splash-features-row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.splash-feat-pill {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #ffffff;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+/* Enter Button */
+.splash-enter-btn {
+  position: relative;
+  width: 100%;
+  padding: 16px 24px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 22px;
+  font-family: inherit;
+  font-size: 1.18rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 12px 35px rgba(16, 185, 129, 0.55),
+              0 4px 15px rgba(0, 0, 0, 0.4);
+  transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.splash-enter-btn:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 16px 45px rgba(16, 185, 129, 0.7);
+}
+
+.splash-enter-btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+
+.btn-play-icon {
+  fill: currentColor;
+}
+
+.splash-footer-note {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  color: #ffffff;
+  font-weight: 600;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
+}
+
+/* Mobile Screen Sizing */
+@media (max-width: 480px) {
+  .splash-glass-card {
+    padding: 1.75rem 1.25rem;
+    border-radius: 28px;
+    gap: 1.2rem;
+  }
+
+  .splash-main-title {
+    font-size: 1.7rem;
+  }
+
+  .splash-enter-btn {
+    padding: 14px 20px;
+    font-size: 1.08rem;
+  }
+}

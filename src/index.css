@@ -1,0 +1,163 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Rubik:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+  --font-hebrew: 'Rubik', sans-serif;
+  --font-english: 'Outfit', sans-serif;
+  
+  --primary: #059669;
+  --primary-light: #10b981;
+  --primary-dark: #047857;
+  --secondary: #3b82f6;
+  --accent: #f59e0b;
+  --accent-gold: #fbbf24;
+  --danger: #ef4444;
+  
+  --bg-gradient-dark: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #064e3b 100%);
+  --bg-gradient-light: linear-gradient(135deg, #f0fdf4 0%, #e0f2fe 50%, #fef3c7 100%);
+  
+  --card-bg-dark: rgba(30, 41, 59, 0.75);
+  --card-bg-light: rgba(255, 255, 255, 0.85);
+  --card-border-dark: rgba(255, 255, 255, 0.12);
+  --card-border-light: rgba(0, 0, 0, 0.08);
+  
+  --text-main-dark: #f8fafc;
+  --text-sub-dark: #94a3b8;
+  --text-main-light: #0f172a;
+  --text-sub-light: #475569;
+  
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 25px -5px rgba(0, 0, 0, 0.2);
+  --shadow-glow: 0 0 20px rgba(16, 185, 129, 0.35);
+  
+  --radius-lg: 20px;
+  --radius-md: 14px;
+  --radius-sm: 8px;
+  
+  /* Safe area padding for iPhone notch & home bar */
+  --sat: env(safe-area-inset-top, 0px);
+  --sab: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html, body {
+  font-family: var(--font-hebrew);
+  direction: rtl;
+  text-align: right;
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  overflow-x: hidden;
+  background: #0f172a;
+  color: #f8fafc;
+  transition: background 0.3s ease, color 0.3s ease;
+  padding-top: var(--sat);
+  padding-bottom: var(--sab);
+}
+
+body.theme-light {
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+/* Ensure minimum touch target size for iOS Human Interface Guidelines */
+button, input, select {
+  min-height: 44px;
+  touch-action: manipulation;
+}
+
+/* Glass panel */
+.glass-panel {
+  background: var(--card-bg-dark);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border-dark);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+}
+
+.theme-light .glass-panel {
+  background: var(--card-bg-light);
+  border-color: var(--card-border-light);
+}
+
+/* iPhone & Mobile Responsiveness Adjustments */
+@media (max-width: 480px) {
+  body {
+    font-size: 15px;
+  }
+  
+  .glass-panel {
+    border-radius: var(--radius-md);
+  }
+  
+  .tagalog-heading {
+    font-size: 2rem !important;
+  }
+
+  .hebrew-heading {
+    font-size: 1.8rem !important;
+  }
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { transform: scale(1); box-shadow: 0 0 15px rgba(16, 185, 129, 0.4); }
+  50% { transform: scale(1.03); box-shadow: 0 0 25px rgba(16, 185, 129, 0.7); }
+}
+
+.app-content-area {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1rem 1rem 100px 1rem;
+  min-height: calc(100vh - 120px);
+}
+
+.is-simulator-active .app-content-area {
+  padding: 0.75rem 0.75rem 90px 0.75rem;
+  min-height: auto;
+}
+
+/* Hide scrollbars gracefully on touch scroll */
+.is-simulator-active {
+  width: 100%;
+}
+
+/* Floating Activity Toast Notification (+10 XP & Streaks) */
+.activity-toast-badge {
+  position: fixed;
+  top: 76px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1500;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.92) 0%, rgba(6, 78, 59, 0.95) 100%);
+  color: #fbbf24;
+  font-weight: 800;
+  font-size: 0.9rem;
+  padding: 8px 20px;
+  border-radius: 20px;
+  border: 1px solid rgba(251, 191, 36, 0.4);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.4),
+              0 0 15px rgba(16, 185, 129, 0.35);
+  pointer-events: none;
+  backdrop-filter: blur(12px);
+  direction: rtl;
+}
+
+.theme-light .activity-toast-badge {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(209, 250, 229, 0.95) 100%);
+  color: #047857;
+  border-color: rgba(4, 120, 87, 0.3);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+}
+
+

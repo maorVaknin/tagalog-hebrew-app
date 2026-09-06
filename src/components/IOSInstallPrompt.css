@@ -1,0 +1,108 @@
+.ios-install-banner {
+  position: fixed;
+  bottom: 20px;
+  right: 50%;
+  transform: translateX(50%);
+  width: 92%;
+  max-width: 460px;
+  z-index: 1000;
+  padding: 20px;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  background: rgba(15, 23, 42, 0.95);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4), var(--shadow-glow);
+}
+
+.theme-light .ios-install-banner {
+  background: rgba(255, 255, 255, 0.96);
+  border-color: var(--primary-light);
+}
+
+.close-prompt-btn {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: none;
+  border: none;
+  color: var(--text-sub-dark);
+  cursor: pointer;
+  padding: 4px;
+}
+
+.prompt-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.app-icon-badge {
+  font-size: 2.2rem;
+  background: rgba(16, 185, 129, 0.2);
+  padding: 6px;
+  border-radius: 14px;
+}
+
+.prompt-header h4 {
+  font-size: 1.05rem;
+  color: var(--text-main-dark);
+  margin-bottom: 2px;
+}
+
+.theme-light .prompt-header h4 {
+  color: var(--text-main-light);
+}
+
+.prompt-header p {
+  font-size: 0.8rem;
+  color: var(--text-sub-dark);
+}
+
+.ios-steps-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.step-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.85rem;
+  color: var(--text-main-dark);
+  background: rgba(255, 255, 255, 0.05);
+  padding: 8px 12px;
+  border-radius: var(--radius-sm);
+}
+
+.theme-light .step-item {
+  color: var(--text-main-light);
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.step-num {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--primary);
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.75rem;
+}
+
+.share-icon {
+  color: #3b82f6;
+  margin-right: auto;
+}
+
+.add-icon {
+  color: var(--primary-light);
+  margin-right: auto;
+}
+
+.check-icon {
+  color: var(--accent-gold);
+  margin-right: auto;
+}
