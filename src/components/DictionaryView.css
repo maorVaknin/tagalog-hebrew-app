@@ -512,18 +512,112 @@
   box-shadow: 0 4px 15px rgba(16, 185, 129, 0.35);
 }
 
-/* Mobile Screen Adjustments */
+/* Mobile Screen Adjustments (Width <= 600px) */
 @media (max-width: 600px) {
+  .dictionary-wrapper {
+    padding: 0 10px 90px 10px;
+    gap: 14px;
+  }
+
+  .dictionary-header-card {
+    padding: 16px 14px;
+    border-radius: 20px;
+    gap: 12px;
+  }
+
+  .dict-header-titles h2 {
+    font-size: 1.25rem;
+  }
+
+  .dict-header-titles p {
+    font-size: 0.8rem;
+  }
+
+  .dict-search-input {
+    padding: 12px 40px 12px 36px;
+    font-size: 0.88rem;
+    border-radius: 14px;
+  }
+
   .dictionary-grid {
     grid-template-columns: 1fr;
+    gap: 12px;
   }
 
   .dict-toolbar-strip {
     flex-direction: column;
     align-items: stretch;
+    gap: 10px;
   }
 
   .dict-view-switcher {
-    align-self: flex-end;
+    align-self: center;
+    width: 100%;
+    justify-content: center;
+  }
+
+  .view-switch-btn {
+    flex: 1;
+    justify-content: center;
+  }
+
+  /* Table styling for mobile: Convert table rows to mobile card layout (Zero Horizontal Scroll) */
+  .dict-table-container {
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    overflow-x: visible;
+  }
+
+  .dict-table, .dict-table tbody, .dict-table tr, .dict-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .dict-table thead {
+    display: none;
+  }
+
+  .dict-table tr {
+    position: relative;
+    margin-bottom: 12px;
+    background: rgba(15, 23, 42, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    border-radius: 18px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
+  }
+
+  .dict-table td {
+    padding: 0;
+    border: none;
+  }
+
+  .dict-table td.td-audio {
+    position: absolute;
+    left: 14px;
+    top: 14px;
+  }
+
+  .td-tagalog {
+    font-size: 1.15rem;
+    padding-left: 45px;
+  }
+
+  .td-phonetic {
+    font-size: 0.85rem;
+  }
+
+  .td-hebrew {
+    font-size: 0.95rem;
+    margin-top: 2px;
+  }
+
+  .table-cat-badge {
+    display: inline-block;
+    margin-top: 4px;
   }
 }
