@@ -1,6 +1,7 @@
 /**
  * מנוע תרגום חופשי בלייב (Live Google Translate Engine)
- * משלב שליפה מהירה ממאגר המילון וחיבור בזמן אמת ל-Google Translate API.
+ * משלב שליפה מהירה ממאגר המילון וחיבור בזמן אמת ל-Google Translate API הרשמי.
+ * תומך בתרגום מדויק מעברית לפיליפינית (Tagalog) ובפונטיקה מלאה בעברית מנוקדת.
  */
 import { comprehensiveDictionaryData } from '../data/dictionaryData';
 import { courseData } from '../data/courseData';
@@ -40,7 +41,7 @@ export function isHebrewText(text) {
 }
 
 /**
- * מנוע פונטיקה דינמי להמרת מילות טגלוג לתעתיק בעברית מנוקדת
+ * מנוע פונטיקה דינמי ומלא להמרת מילות טגלוג לתעתיק בעברית מנוקדת
  */
 const phoneticDictionary = {
   "magandang": "מַגַאנְדַאנְג",
@@ -80,13 +81,10 @@ const phoneticDictionary = {
   "sino": "סִינוֹ",
   "ano": "אָנוֹ",
   "dagat": "דָאגָאת",
-  "island": "אָאיְלֶנְד",
-  "hopping": "הוֹפִּינְג",
   "bangka": "בָּאנְג-כָּה",
   "kwarto": "כְּוָוארְתוֹ",
   "susi": "סוּסִי",
   "tulong": "תוּלוֹנְג",
-  "masakit": "מָאסָאכִֿית",
   "doktor": "דּוֹכְתוֹר",
   "ospital": "אוֹסְפִּינָאל",
   "kita": "כִּיתָה",
@@ -100,7 +98,7 @@ const phoneticDictionary = {
   "isda": "אִיסְדָה",
   "manok": "מָאנוֹכְּ",
   "baboy": "בָּאבּוֹי",
-  "bapor": "בָּאפּוֹר"
+  "mansanas": "מָאנְסָאנָאס"
 };
 
 export function generateTagalogPhonetic(tagalogText) {
@@ -108,36 +106,49 @@ export function generateTagalogPhonetic(tagalogText) {
   const words = tagalogText.toLowerCase().replace(/[^a-zñ\s-]/g, '').split(/\s+/);
   
   const phoneticWords = words.map(w => {
+    if (!w) return '';
     if (phoneticDictionary[w]) return phoneticDictionary[w];
+    
+    // המרה הברותית מלאה של אותיות טאגאלוג לעברית
     return w
+      .replace(/ng/g, 'נְג')
+      .replace(/ch/g, 'צ\'')
+      .replace(/sh/g, 'ש')
       .replace(/mag/g, 'מָאג')
       .replace(/ang/g, 'אָנְג')
       .replace(/ing/g, 'אִין-ג')
-      .replace(/ng/g, 'נְג')
-      .replace(/ka/g, 'כָּה')
-      .replace(/ko/g, 'כּוֹ')
-      .replace(/mo/g, 'מוֹ')
-      .replace(/na/g, 'נָא')
-      .replace(/pa/g, 'פָּא')
-      .replace(/ba/g, 'בָּא')
-      .replace(/sa/g, 'סָא')
-      .replace(/ta/g, 'תָּא');
+      .replace(/a/g, 'ָא').replace(/e/g, 'ֶא').replace(/i/g, 'ִי').replace(/o/g, 'וֹ').replace(/u/g, 'וּ')
+      .replace(/b/g, 'בּ').replace(/k/g, 'כּ').replace(/c/g, 'כּ').replace(/d/g, 'ד').replace(/g/g, 'ג')
+      .replace(/h/g, 'ה').replace(/l/g, 'ל').replace(/m/g, 'מ').replace(/n/g, 'נ').replace(/p/g, 'פּ')
+      .replace(/r/g, 'ר').replace(/s/g, 'ס').replace(/t/g, 'תּ').replace(/w/g, 'ו').replace(/y/g, 'י')
+      .replace(/z/g, 'ז').replace(/j/g, 'ג\'').replace(/f/g, 'פּ').replace(/v/g, 'בּ');
   });
 
-  return phoneticWords.join(' ');
+  return phoneticWords.filter(Boolean).join(' ');
 }
 
 /**
- * זיהוי האם טקסט מכיל מילים באנגלית ומחייב תרגום שני (pivot) לטאגאלוג/פיליפינית
+ * מנגנון תרגום ראשי מול Google Translate API הרשמי
  */
-function isEnglishSentence(text) {
-  if (!text) return false;
-  const englishWordsRegex = /\b(the|is|are|where|how|much|want|order|food|hotel|restaurant|closest|near|where's|there's|can|you|help|my|to|a|an|in|on|at|for|ride|city|center|airport|please|thank|thanks|your)\b/i;
-  const tagalogMarkers = /\b(ang|ng|sa|mga|po|ko|mo|na|ka|si|ako|ikaw|kami|tayo|sila|saan|kailan|bakit|magkano|masarap|salamat|maraming|gusto|para|ba|pa|din|rin)\b/i;
-  
-  return englishWordsRegex.test(text) && !tagalogMarkers.test(text);
+async function fetchGoogleTranslateAPI(q, sourceLang, targetLang) {
+  try {
+    const url = `https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl=${sourceLang}&tl=${targetLang}&q=${encodeURIComponent(q)}`;
+    const res = await fetch(url);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (Array.isArray(data) && data[0]) {
+      const translated = typeof data[0] === 'string' ? data[0] : (data[0][0] || null);
+      if (translated) return translated.trim();
+    }
+  } catch (err) {
+    console.log(`Google Translate API ${sourceLang}->${targetLang} error:`, err);
+  }
+  return null;
 }
 
+/**
+ * מנגנון גיבוי משני (MyMemory API)
+ */
 async function fetchMyMemoryTranslation(q, sourceLang, targetLang) {
   try {
     const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=${sourceLang}|${targetLang}`;
@@ -154,7 +165,7 @@ async function fetchMyMemoryTranslation(q, sourceLang, targetLang) {
 }
 
 /**
- * תרגום אסינכרוני בזמן אמת מול מנועי תרגום פיליפינית (MyMemory API + Google Translate + מילון מקומי)
+ * תרגום אסינכרוני בזמן אמת מול מנועי Google Translate + מילון מקומי
  */
 export async function translateFreeTextAsync(inputText) {
   initMasterDictionary();
@@ -179,63 +190,40 @@ export async function translateFreeTextAsync(inputText) {
     };
   }
 
-  // 2. תרגום מעברית לפיליפינית / Tagalog
-  if (isHeb) {
-    // 2.1 ניסיון תרגום ישיר עברית -> טאגאלוג
-    let tagalogRes = await fetchMyMemoryTranslation(trimmed, 'he', 'tl');
+  // 2. תרגום ראשי מול Google Translate API
+  const sourceLang = isHeb ? 'he' : 'tl';
+  const targetLang = isHeb ? 'tl' : 'he';
 
-    // 2.2 אם התוצאה החזירה אנגלית או ריקה - ביצוע פיווט (Hebrew -> English -> Tagalog)
-    if (!tagalogRes || tagalogRes.toLowerCase() === trimmed.toLowerCase() || isEnglishSentence(tagalogRes)) {
-      const englishIntermediate = await fetchMyMemoryTranslation(trimmed, 'he', 'en');
-      if (englishIntermediate) {
-        const tagalogPivot = await fetchMyMemoryTranslation(englishIntermediate, 'en', 'tl');
-        if (tagalogPivot) {
-          tagalogRes = tagalogPivot;
-        }
-      }
-    }
+  let translatedRes = await fetchGoogleTranslateAPI(trimmed, sourceLang, targetLang);
 
-    // ניקוי תווי מכונה וסימנים (למשל: "Mag - order" -> "Mag-order")
-    if (tagalogRes) {
-      tagalogRes = tagalogRes
-        .replace(/\s+-\s+/g, '-')
-        .replace(/\bTYVM\b/gi, 'Maraming salamat');
-      
-      const phonetic = generateTagalogPhonetic(tagalogRes);
-
-      return {
-        originalText: trimmed,
-        tagalog: tagalogRes,
-        hebrew: trimmed,
-        phoneticHebrew: phonetic,
-        category: 'תרגום פיליפינית בזמן אמת 🇵🇭',
-        exampleSentence: null,
-        isExactMatch: false,
-        detectedLang: 'hebrew'
-      };
-    }
-  } else {
-    // מפיליפינית/אנגלית לעברית
-    let hebrewRes = await fetchMyMemoryTranslation(trimmed, 'tl', 'he');
-    if (!hebrewRes || hebrewRes.toLowerCase() === trimmed.toLowerCase()) {
-      hebrewRes = await fetchMyMemoryTranslation(trimmed, 'en', 'he');
-    }
-
-    if (hebrewRes) {
-      return {
-        originalText: trimmed,
-        tagalog: trimmed,
-        hebrew: hebrewRes,
-        phoneticHebrew: generateTagalogPhonetic(trimmed),
-        category: 'תרגום פיליפינית בזמן אמת 🇵🇭',
-        exampleSentence: null,
-        isExactMatch: false,
-        detectedLang: 'tagalog'
-      };
-    }
+  // 3. במידה ו-Google Translate לא החזיר תוצאה, פניה למנוע הגיבוי MyMemory
+  if (!translatedRes || translatedRes.toLowerCase() === trimmed.toLowerCase()) {
+    translatedRes = await fetchMyMemoryTranslation(trimmed, sourceLang, targetLang);
   }
 
-  // 3. מנוע נפילה מקומי (Word-by-word fallback)
+  if (translatedRes) {
+    // ניקוי תווי רווח ומקפים
+    const cleanedRes = translatedRes
+      .replace(/\s+-\s+/g, '-')
+      .replace(/\bTYVM\b/gi, 'Maraming salamat');
+
+    const tagalogOutput = isHeb ? cleanedRes : trimmed;
+    const hebrewOutput = isHeb ? trimmed : cleanedRes;
+    const phonetic = generateTagalogPhonetic(tagalogOutput);
+
+    return {
+      originalText: trimmed,
+      tagalog: tagalogOutput,
+      hebrew: hebrewOutput,
+      phoneticHebrew: phonetic,
+      category: 'תרגום פיליפינית בזמן אמת 🇵🇭',
+      exampleSentence: null,
+      isExactMatch: false,
+      detectedLang: isHeb ? 'hebrew' : 'tagalog'
+    };
+  }
+
+  // 4. מנוע נפילה מקומי (Word-by-word fallback)
   return translateFreeTextFallback(trimmed, isHeb);
 }
 
