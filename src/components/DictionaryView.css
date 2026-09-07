@@ -550,6 +550,20 @@
     gap: 10px;
   }
 
+  .dict-categories-scroll {
+    flex-wrap: wrap;
+    overflow-x: visible;
+    justify-content: flex-start;
+    gap: 6px;
+    padding-bottom: 0;
+  }
+
+  .dict-chip-btn {
+    padding: 5px 10px;
+    font-size: 0.78rem;
+    border-radius: 12px;
+  }
+
   .dict-view-switcher {
     align-self: center;
     width: 100%;

@@ -268,6 +268,20 @@
   color: #cbd5e1;
 }
 
+.translator-loading-state {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 28px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 20px;
+  color: #34d399;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+
 .translator-empty-state {
   text-align: center;
   padding: 24px 10px;

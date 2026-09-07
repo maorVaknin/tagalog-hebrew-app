@@ -1,17 +1,15 @@
 /**
- * מנוע תרגום חופשי בלייב (Live Tagalog-Hebrew Translator Engine)
- * תומך בחיפוש ותרגום עברית ⇄ טגלוג, יצירת תעתיק פונטי חכם ושילוב מנוע שמע.
+ * מנוע תרגום חופשי בלייב (Live Google Translate Engine)
+ * משלב שליפה מהירה ממאגר המילון וחיבור בזמן אמת ל-Google Translate API.
  */
 import { comprehensiveDictionaryData } from '../data/dictionaryData';
 import { courseData } from '../data/courseData';
 
-// 1. מילון מונחים מקוצר להתאמה מהירה
 const masterDictionaryMap = new Map();
 
 function initMasterDictionary() {
   if (masterDictionaryMap.size > 0) return;
 
-  // מילות הקורס
   if (courseData?.units) {
     courseData.units.forEach(unit => {
       unit.lessons.forEach(lesson => {
@@ -25,7 +23,6 @@ function initMasterDictionary() {
     });
   }
 
-  // מילות המילון המורחב
   comprehensiveDictionaryData.forEach(item => {
     const tagalogKey = item.tagalog.trim().toLowerCase();
     const hebrewKey = item.hebrew.trim().toLowerCase();
@@ -96,7 +93,14 @@ const phoneticDictionary = {
   "pogi": "פּוֹגִי",
   "kaibigan": "כָּאאִיבִֿיגָאן",
   "ingat": "אִין-גָאט",
-  "paalam": "פָּאָאָלָאם"
+  "paalam": "פָּאָאָלָאם",
+  "gusto": "גּוּסְתוֹ",
+  "kong": "כּוֹנְג",
+  "kumain": "כּוּמָאאִין",
+  "isda": "אִיסְדָה",
+  "manok": "מָאנוֹכְּ",
+  "baboy": "בָּאבּוֹי",
+  "bapor": "בָּאפּוֹר"
 };
 
 export function generateTagalogPhonetic(tagalogText) {
@@ -105,7 +109,6 @@ export function generateTagalogPhonetic(tagalogText) {
   
   const phoneticWords = words.map(w => {
     if (phoneticDictionary[w]) return phoneticDictionary[w];
-    // מנגנון תעתיק בסיסי למילים לא מוכרות
     return w
       .replace(/mag/g, 'מָאג')
       .replace(/ang/g, 'אָנְג')
@@ -125,17 +128,19 @@ export function generateTagalogPhonetic(tagalogText) {
 }
 
 /**
- * הפונקציה הראשית לתרגום חופשי בלייב
+ * תרגום אסינכרוני בזמן אמת מול Google Translate API
  */
-export function translateFreeText(inputText) {
+export async function translateFreeTextAsync(inputText) {
   initMasterDictionary();
   const trimmed = (inputText || '').trim();
   if (!trimmed) return null;
 
-  const inputKey = trimmed.toLowerCase();
   const isHeb = isHebrewText(trimmed);
+  const sourceLang = isHeb ? 'he' : 'tl';
+  const targetLang = isHeb ? 'tl' : 'he';
 
-  // 1. חיפוש התאמה מדויקת במילון
+  // 1. בדיקת התאמה מדויקת במילון המקומי (תגובה מיידית ב-0ms)
+  const inputKey = trimmed.toLowerCase();
   const exactMatch = masterDictionaryMap.get(inputKey);
   if (exactMatch) {
     return {
@@ -143,76 +148,76 @@ export function translateFreeText(inputText) {
       tagalog: exactMatch.tagalog,
       hebrew: exactMatch.hebrew,
       phoneticHebrew: exactMatch.phoneticHebrew || generateTagalogPhonetic(exactMatch.tagalog),
-      category: exactMatch.category || 'תרגום חופשי',
+      category: exactMatch.category || 'מילון קורס',
       exampleSentence: exactMatch.exampleSentence || null,
       isExactMatch: true,
       detectedLang: isHeb ? 'hebrew' : 'tagalog'
     };
   }
 
-  // 2. תרגום חכם עבור משפטים ומילים חופשיות
-  if (isHeb) {
-    // תרגום מורכב מעברית לטגלוג
-    let matchedTagalogWords = [];
-    let matchedPhonetics = [];
-    const words = trimmed.split(/\s+/);
+  // 2. שליפת תרגום בלייב מ-Google Translate API
+  try {
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(trimmed)}`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error('API Error');
+    const data = await response.json();
+    
+    let translatedText = '';
+    if (data && data[0]) {
+      translatedText = data[0].map(segment => segment[0]).join('');
+    }
 
-    words.forEach(w => {
-      const match = masterDictionaryMap.get(w.toLowerCase());
-      if (match) {
-        matchedTagalogWords.push(match.tagalog);
-        if (match.phoneticHebrew) matchedPhonetics.push(match.phoneticHebrew);
-      } else {
-        matchedTagalogWords.push(w);
-      }
-    });
+    if (!translatedText) throw new Error('Empty response');
 
-    const translatedTagalog = matchedTagalogWords.join(' ');
-    const phonetic = matchedPhonetics.join(' ') || generateTagalogPhonetic(translatedTagalog);
+    const tagalogOutput = isHeb ? translatedText : trimmed;
+    const hebrewOutput = isHeb ? trimmed : translatedText;
+    const phonetic = generateTagalogPhonetic(tagalogOutput);
 
     return {
       originalText: trimmed,
-      tagalog: translatedTagalog,
-      hebrew: trimmed,
+      tagalog: tagalogOutput,
+      hebrew: hebrewOutput,
       phoneticHebrew: phonetic,
-      category: 'תרגום חופשי בלייב',
+      category: 'Google Translate ✨',
       exampleSentence: null,
       isExactMatch: false,
-      detectedLang: 'hebrew'
+      detectedLang: isHeb ? 'hebrew' : 'tagalog'
     };
-  } else {
-    // תרגום חכם מפיליפינית/טגלוג לעברית
-    let matchedHebrewWords = [];
-    const words = trimmed.split(/\s+/);
-
-    words.forEach(w => {
-      const match = masterDictionaryMap.get(w.toLowerCase());
-      if (match) {
-        matchedHebrewWords.push(match.hebrew);
-      } else {
-        matchedHebrewWords.push(w);
-      }
-    });
-
-    const translatedHebrew = matchedHebrewWords.join(' ');
-    const phonetic = generateTagalogPhonetic(trimmed);
-
-    return {
-      originalText: trimmed,
-      tagalog: trimmed,
-      hebrew: translatedHebrew,
-      phoneticHebrew: phonetic,
-      category: 'תרגום חופשי בלייב',
-      exampleSentence: null,
-      isExactMatch: false,
-      detectedLang: 'tagalog'
-    };
+  } catch (err) {
+    // מנוע נפילה מקומי (Fallback) במידה והחיבור בלתי זמין
+    return translateFreeTextFallback(trimmed, isHeb);
   }
 }
 
-/**
- * ביטויים מהירים ושימושיים למטיילים
- */
+function translateFreeTextFallback(trimmed, isHeb) {
+  let matchedWords = [];
+  const words = trimmed.split(/\s+/);
+
+  words.forEach(w => {
+    const match = masterDictionaryMap.get(w.toLowerCase());
+    if (match) {
+      matchedWords.push(isHeb ? match.tagalog : match.hebrew);
+    } else {
+      matchedWords.push(w);
+    }
+  });
+
+  const translatedText = matchedWords.join(' ');
+  const tagalogOutput = isHeb ? translatedText : trimmed;
+  const hebrewOutput = isHeb ? trimmed : translatedText;
+
+  return {
+    originalText: trimmed,
+    tagalog: tagalogOutput,
+    hebrew: hebrewOutput,
+    phoneticHebrew: generateTagalogPhonetic(tagalogOutput),
+    category: 'תרגום חופשי',
+    exampleSentence: null,
+    isExactMatch: false,
+    detectedLang: isHeb ? 'hebrew' : 'tagalog'
+  };
+}
+
 export const quickTravelPhrases = [
   { tagalog: "Saan ang hotel?", hebrew: "איפה המלון?", phonetic: "סָאָאן אָנְג הוֹתֶל?" },
   { tagalog: "Magkano ito?", hebrew: "כמה זה עולה?", phonetic: "מָאגְכָּאנוֹ אִיתוֹ?" },

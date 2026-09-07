@@ -1,21 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Volume2, Copy, Check, X, Globe, Sparkles, ArrowLeftRight, HelpCircle } from 'lucide-react';
+import { Search, Volume2, Copy, Check, X, Globe, Sparkles, ArrowLeftRight, Loader2 } from 'lucide-react';
 import { speakTagalog } from '../utils/audioTTS';
-import { translateFreeText, quickTravelPhrases } from '../utils/translatorEngine';
+import { translateFreeTextAsync, quickTravelPhrases } from '../utils/translatorEngine';
 import './LiveTranslatorModal.css';
 
 export function LiveTranslatorModal({ isOpen, onClose }) {
   const [inputText, setInputText] = useState('');
   const [translationResult, setTranslationResult] = useState(null);
+  const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (inputText.trim()) {
-      const res = translateFreeText(inputText);
-      setTranslationResult(res);
-    } else {
+    const trimmed = inputText.trim();
+    if (!trimmed) {
       setTranslationResult(null);
+      setLoading(false);
+      return;
     }
+
+    setLoading(true);
+    const timer = setTimeout(async () => {
+      try {
+        const res = await translateFreeTextAsync(trimmed);
+        setTranslationResult(res);
+      } catch (e) {
+        console.log('Translation error:', e);
+      } finally {
+        setLoading(false);
+      }
+    }, 350); // 350ms debounce for smooth typing
+
+    return () => clearTimeout(timer);
   }, [inputText]);
 
   if (!isOpen) return null;
@@ -44,7 +59,7 @@ export function LiveTranslatorModal({ isOpen, onClose }) {
             <div className="translator-globe-icon"><Globe size={22} /></div>
             <div>
               <h3>מתרגם חופשי בלייב</h3>
-              <span className="translator-sub-title">תרגום מיידי עברית ⇄ טגלוג עם שמע ותעתיק</span>
+              <span className="translator-sub-title">תרגום Google Translate בזמן אמת עברית ⇄ טגלוג</span>
             </div>
           </div>
           <button className="translator-close-btn" onClick={onClose}>
@@ -56,7 +71,7 @@ export function LiveTranslatorModal({ isOpen, onClose }) {
         <div className="translator-input-group">
           <textarea
             className="translator-textarea"
-            placeholder="הקלד כאן כל מילה או משפט חופשי (למשל: כמה זה עולה?, איפה המלון?, Saan ang beach?)..."
+            placeholder="הקלד כאן כל מילה או משפט חופשי (למשל: איפה יש מסעדה טובה?, כמה זה עולה?, Saan ang beach?)..."
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             rows={2}
@@ -70,7 +85,12 @@ export function LiveTranslatorModal({ isOpen, onClose }) {
         </div>
 
         {/* Translation Results Display */}
-        {translationResult ? (
+        {loading ? (
+          <div className="translator-loading-state">
+            <Loader2 size={26} className="animate-spin text-emerald-400" />
+            <span>מתרגם בלייב מ-Google Translate... ✨</span>
+          </div>
+        ) : translationResult ? (
           <div className="translation-result-card animate-fade-in">
             <div className="result-header">
               <span className="result-badge">{translationResult.category}</span>
@@ -129,7 +149,7 @@ export function LiveTranslatorModal({ isOpen, onClose }) {
         ) : (
           <div className="translator-empty-state">
             <Sparkles size={32} className="empty-sparkle-icon" />
-            <p>הקלידו מילה או משפט חופשי כדי לקבל תרגום מיידי, תעתיק פונטי והשמעה קולית.</p>
+            <p>הקלידו מילה או משפט חופשי כדי לקבל תרגום מיידי מ-Google Translate, תעתיק פונטי והשמעה קולית.</p>
           </div>
         )}
 
