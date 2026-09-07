@@ -29,9 +29,8 @@ export const Navbar = ({
         <div className="brand-titles">
           <div className="brand-title-row">
             <h1 className="brand-name">
-              Tagalog<span className="brand-highlight">Hebrew</span>
+              Taga<span className="brand-highlight">lingo</span>
             </h1>
-            <span className="brand-badge-pro">PRO</span>
           </div>
           <span className="brand-sub">למידת טגלוג אינטראקטיבית בעברית</span>
         </div>

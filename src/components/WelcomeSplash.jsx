@@ -65,23 +65,9 @@ export function WelcomeSplash({ activeCloudUser, onEnterApp, onRegister, onLogin
           </div>
           <div className="splash-brand-titles">
             <h1 className="splash-main-title">
-              Tagalog<span className="splash-highlight">Hebrew</span>
-              <span className="splash-pro-chip">PRO</span>
+              Taga<span className="splash-highlight">lingo</span>
             </h1>
             <span className="splash-sub-title">האפליקציה האינטראקטיבית ללימוד טגלוג בעברית</span>
-          </div>
-        </div>
-
-        {/* Feature Highlights Pills */}
-        <div className="splash-features-row">
-          <div className="splash-feat-pill">
-            <span>🌴</span> 145 מילים ושיחות
-          </div>
-          <div className="splash-feat-pill">
-            <span>🎧</span> הקריית שמע טבעית
-          </div>
-          <div className="splash-feat-pill">
-            <span>⭐</span> מסלול לימוד דואולינגו
           </div>
         </div>
 
