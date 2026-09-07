@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { CheckCircle2, Play, Sparkles, Star, BookOpen, X, Award, ShieldCheck, Trophy } from 'lucide-react';
+import { CheckCircle2, Play, Sparkles, Star, BookOpen, X, Trophy, Award, Lock } from 'lucide-react';
 import './SyllabusView.css';
 
 export function SyllabusView({ courseData, completedLessons, onSelectLesson, onSelectQuiz, userStats }) {
@@ -13,35 +13,9 @@ export function SyllabusView({ courseData, completedLessons, onSelectLesson, onS
     setActivePopoverLesson(null);
   };
 
-  // Helper to generate smooth cubic bezier SVG path between node centers
-  const generatePathD = (lessonsCount) => {
-    const rowHeight = 125;
-    const centerX = 160;
-    const offsets = [0, 50, 0, -50]; // Center, Right, Center, Left
-
-    let points = [];
-    for (let i = 0; i < lessonsCount; i++) {
-      const x = centerX + offsets[i % 4];
-      const y = i * rowHeight + 40; // 40px is node center Y offset in row
-      points.push({ x, y });
-    }
-
-    if (points.length === 0) return { fullPath: '', activePath: '' };
-
-    let fullPath = `M ${points[0].x} ${points[0].y}`;
-    for (let i = 1; i < points.length; i++) {
-      const prev = points[i - 1];
-      const curr = points[i];
-      const cpY = prev.y + (curr.y - prev.y) * 0.5;
-      fullPath += ` C ${prev.x} ${cpY}, ${curr.x} ${cpY}, ${curr.x} ${curr.y}`;
-    }
-
-    return fullPath;
-  };
-
   return (
     <div className="syllabus-container animate-fade-in" dir="rtl">
-      {/* Duolingo-Style Interactive Learning Path */}
+      {/* Interactive Vertical Learning Path */}
       <div className="duolingo-path-wrapper">
         {courseData.units.map((unit, unitIdx) => {
           // Calculate Unit Completion Progress
@@ -51,12 +25,10 @@ export function SyllabusView({ courseData, completedLessons, onSelectLesson, onS
 
           // Theme color for unit
           const unitColor = unit.color || '#10b981';
-          const offsets = [0, 50, 0, -50];
-          const fullPathD = generatePathD(unit.lessons.length);
 
           return (
             <div key={unit.unitId} className="duolingo-unit-section">
-              {/* Unit Header Banner */}
+              {/* Unit Header Banner Card */}
               <div 
                 className="unit-banner-card" 
                 style={{ 
@@ -96,50 +68,27 @@ export function SyllabusView({ courseData, completedLessons, onSelectLesson, onS
                 </div>
               </div>
 
-              {/* Serpentine Curve Path Container */}
-              <div className="unit-path-container">
-                {/* SVG Connecting Curved Lines */}
-                <svg 
-                  className="unit-path-svg" 
-                  viewBox={`0 0 320 ${unit.lessons.length * 125}`} 
-                  preserveAspectRatio="none"
-                >
-                  <defs>
-                    <linearGradient id={`grad-${unit.unitId}`} x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stopColor={unitColor} stopOpacity="0.8" />
-                      <stop offset="100%" stopColor={unitColor} stopOpacity="0.4" />
-                    </linearGradient>
-                  </defs>
+              {/* Clean Vertical Spine Path (Straight Column with Generous Spacing) */}
+              <div className="vertical-path-container">
+                {/* Central Connecting Vertical Spine Line */}
+                <div 
+                  className="vertical-spine-line" 
+                  style={{
+                    background: `linear-gradient(180deg, ${unitColor} 0%, rgba(255,255,255,0.15) 100%)`,
+                    boxShadow: `0 0 12px ${unitColor}66`
+                  }}
+                />
 
-                  {/* Thick Outer Glow Path */}
-                  <path 
-                    d={fullPathD} 
-                    className="path-bg-line" 
-                  />
-                  {/* Active Colored Path */}
-                  <path 
-                    d={fullPathD} 
-                    className="path-active-line" 
-                    style={{ stroke: `url(#grad-${unit.unitId})` }} 
-                  />
-                </svg>
-
-                {/* Nodes List */}
-                <div className="unit-nodes-list">
+                {/* Lesson Nodes List */}
+                <div className="vertical-nodes-list">
                   {unit.lessons.map((lesson, lessonIdx) => {
                     const isCompleted = completedLessons.includes(lesson.lessonId);
                     const isCurrent = !isCompleted && (lessonIdx === 0 || completedLessons.includes(unit.lessons[lessonIdx - 1]?.lessonId));
 
-                    const offsetX = offsets[lessonIdx % 4];
-
                     return (
-                      <div key={lesson.lessonId} className="node-row-item">
-                        {/* Node & Label Unified Capsule */}
-                        <div 
-                          className="node-capsule" 
-                          style={{ transform: `translateX(${offsetX}px)` }}
-                        >
-                          {/* 3D Duolingo Circle Button */}
+                      <div key={lesson.lessonId} className="vertical-node-row">
+                        {/* 3D Duolingo Circle Button */}
+                        <div className="node-wrapper">
                           <button
                             className={`duolingo-node-btn ${isCompleted ? 'status-completed' : isCurrent ? 'status-current' : 'status-available'}`}
                             style={isCurrent ? { boxShadow: `0 8px 0 ${unitColor}aa, 0 0 25px ${unitColor}77` } : {}}
@@ -148,9 +97,9 @@ export function SyllabusView({ courseData, completedLessons, onSelectLesson, onS
                           >
                             <span className="node-icon-inner">
                               {isCompleted ? (
-                                <CheckCircle2 size={32} className="check-icon" />
+                                <CheckCircle2 size={34} className="check-icon" />
                               ) : isCurrent ? (
-                                <Star size={32} className="star-icon animate-bounce" />
+                                <Star size={34} className="star-icon animate-bounce" />
                               ) : (
                                 <span className="lesson-emoji">{lesson.icon}</span>
                               )}
@@ -162,15 +111,56 @@ export function SyllabusView({ courseData, completedLessons, onSelectLesson, onS
                             )}
                           </button>
 
-                          {/* Node Label Box directly below circle */}
-                          <div className="node-label-box" onClick={() => handleNodeClick(lesson)}>
-                            <span className="node-label-title">{lesson.title}</span>
-                            <span className="node-label-words">{lesson.vocabulary.length} מילים</span>
+                          {/* Spacious Label Card Directly Aligned Below Circle */}
+                          <div className="vertical-label-card" onClick={() => handleNodeClick(lesson)}>
+                            <div className="label-header">
+                              <span className="label-title">{lesson.title}</span>
+                              <span className="label-badge">{lesson.vocabulary.length} מילים</span>
+                            </div>
+                            <span className="label-sub-status">
+                              {isCompleted ? '✓ הושלם בהצלחה' : isCurrent ? '⚡ השיעור הנוכחי' : '🔒 שיעור זמין'}
+                            </span>
                           </div>
                         </div>
                       </div>
                     );
                   })}
+
+                  {/* Unit Mastery Trophy Checkpoint Node */}
+                  <div className="vertical-node-row trophy-checkpoint-row">
+                    <div className="node-wrapper">
+                      <button
+                        className={`duolingo-node-btn trophy-node-btn ${isUnitMastered ? 'status-completed' : 'status-available'}`}
+                        onClick={() => {
+                          if (unit.lessons.length > 0) {
+                            onSelectQuiz(unit.lessons[unit.lessons.length - 1]);
+                          }
+                        }}
+                        title="מבחן מסכם יחידה"
+                      >
+                        <span className="node-icon-inner">
+                          <Trophy size={36} className={isUnitMastered ? 'gold-trophy-icon' : 'trophy-icon'} />
+                        </span>
+                      </button>
+
+                      <div 
+                        className="vertical-label-card trophy-label-card"
+                        onClick={() => {
+                          if (unit.lessons.length > 0) {
+                            onSelectQuiz(unit.lessons[unit.lessons.length - 1]);
+                          }
+                        }}
+                      >
+                        <div className="label-header">
+                          <span className="label-title">🏆 מבחן מסכם יחידה</span>
+                          <span className="label-badge trophy-badge">מבחן</span>
+                        </div>
+                        <span className="label-sub-status">
+                          {isUnitMastered ? '👑 יחידה הושלמה 100%' : 'תרגול ומבחן מסכם'}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

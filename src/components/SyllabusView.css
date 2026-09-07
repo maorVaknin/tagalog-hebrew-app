@@ -1,7 +1,7 @@
-/* Duolingo-Style Interactive Learning Path CSS with SVG Curves & Perfect Alignment */
+/* Duolingo-Style Interactive Learning Path CSS - Spacious Vertical Spine Layout */
 
 .syllabus-container {
-  max-width: 680px;
+  max-width: 620px;
   margin: 0 auto;
   padding: 0 12px 100px 12px;
   direction: rtl;
@@ -10,23 +10,23 @@
 .duolingo-path-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 36px;
+  gap: 40px;
 }
 
 /* Unit Banner Header Card */
 .duolingo-unit-section {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 24px;
 }
 
 .unit-banner-card {
-  padding: 20px;
-  border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  padding: 22px 20px;
+  border-radius: 26px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -76,7 +76,7 @@
 }
 
 .unit-banner-title {
-  font-size: 1.4rem;
+  font-size: 1.45rem;
   font-weight: 800;
   color: #ffffff;
   margin: 0;
@@ -88,7 +88,7 @@
 }
 
 .unit-banner-sub {
-  font-size: 0.82rem;
+  font-size: 0.84rem;
   color: #cbd5e1;
   display: block;
   margin-top: 2px;
@@ -99,8 +99,8 @@
 }
 
 .unit-banner-icon {
-  font-size: 2.8rem;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+  font-size: 3rem;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
 }
 
 /* Unit Progress Bar */
@@ -117,7 +117,7 @@
 .unit-progress-info {
   display: flex;
   justify-content: space-between;
-  font-size: 0.75rem;
+  font-size: 0.76rem;
   font-weight: 700;
   color: #e2e8f0;
 }
@@ -141,110 +141,103 @@
 }
 
 /* ------------------------------------------------ */
-/* SERPENTINE CURVE SVG PATH CONTAINER              */
+/* VERTICAL SPINE PATH CONTAINER                    */
 /* ------------------------------------------------ */
-.unit-path-container {
+.vertical-path-container {
   position: relative;
-  width: 320px;
-  margin: 0 auto;
-  padding: 10px 0;
-}
-
-/* SVG Lines Overlay Behind Nodes */
-.unit-path-svg {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-  overflow: visible;
-}
-
-.path-bg-line {
-  fill: none;
-  stroke: rgba(255, 255, 255, 0.14);
-  stroke-width: 10px;
-  stroke-linecap: round;
-  stroke-dasharray: 6 6;
-}
-
-.path-active-line {
-  fill: none;
-  stroke-width: 7px;
-  stroke-linecap: round;
-  filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.5));
-}
-
-/* Nodes List Container */
-.unit-nodes-list {
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  z-index: 2;
-}
-
-.node-row-item {
-  height: 125px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  position: relative;
-}
-
-/* Capsule Wrapping Circle Button + Label Together */
-.node-capsule {
+  padding: 20px 0;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 6px;
-  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Duolingo 3D Circular Node Button */
+/* Central Spine Line down the center */
+.vertical-spine-line {
+  position: absolute;
+  top: 50px;
+  bottom: 50px;
+  left: 50%;
+  width: 8px;
+  transform: translateX(-50%);
+  border-radius: 10px;
+  z-index: 1;
+  opacity: 0.85;
+}
+
+/* Nodes List Container */
+.vertical-nodes-list {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 55px; /* Spacious vertical separation */
+  width: 100%;
+  z-index: 2;
+  position: relative;
+}
+
+.vertical-node-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+/* Unified Node Wrapper (Circle + Label Card) */
+.node-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  z-index: 2;
+  position: relative;
+  width: 100%;
+  max-width: 250px;
+}
+
+/* 3D Duolingo Circle Button */
 .duolingo-node-btn {
   position: relative;
-  width: 76px;
-  height: 76px;
+  width: 82px;
+  height: 82px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  z-index: 3;
 }
 
 /* Status Completed Node */
 .duolingo-node-btn.status-completed {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  box-shadow: 0 8px 0 #047857, 0 10px 22px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 8px 0 #047857, 0 12px 25px rgba(16, 185, 129, 0.45);
   color: #ffffff;
 }
 
 .duolingo-node-btn.status-completed:hover {
-  transform: translateY(2px);
+  transform: translateY(2px) scale(1.03);
   box-shadow: 0 6px 0 #047857, 0 8px 16px rgba(16, 185, 129, 0.4);
 }
 
 .duolingo-node-btn.status-completed:active {
-  transform: translateY(6px);
+  transform: translateY(6px) scale(1);
   box-shadow: 0 2px 0 #047857;
 }
 
 /* Status Current Active Node */
 .duolingo-node-btn.status-current {
   background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  box-shadow: 0 8px 0 #b45309, 0 12px 25px rgba(245, 158, 11, 0.5);
+  box-shadow: 0 8px 0 #b45309, 0 14px 28px rgba(245, 158, 11, 0.55);
   color: #ffffff;
 }
 
 .duolingo-node-btn.status-current:hover {
-  transform: translateY(2px) scale(1.04);
-  box-shadow: 0 6px 0 #b45309, 0 14px 28px rgba(245, 158, 11, 0.6);
+  transform: translateY(2px) scale(1.05);
+  box-shadow: 0 6px 0 #b45309, 0 16px 30px rgba(245, 158, 11, 0.65);
 }
 
 .duolingo-node-btn.status-current:active {
@@ -254,7 +247,7 @@
 
 .active-pulse-ring {
   position: absolute;
-  inset: -6px;
+  inset: -7px;
   border-radius: 50%;
   border: 3px solid #f59e0b;
   animation: pulse-ring 1.8s infinite;
@@ -269,7 +262,7 @@
 /* Status Available Node */
 .duolingo-node-btn.status-available {
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  box-shadow: 0 8px 0 #1e40af, 0 10px 20px rgba(59, 130, 246, 0.35);
+  box-shadow: 0 8px 0 #1e40af, 0 10px 22px rgba(59, 130, 246, 0.35);
   color: #ffffff;
 }
 
@@ -283,6 +276,22 @@
   box-shadow: 0 2px 0 #1e40af;
 }
 
+/* Trophy Node Button */
+.trophy-node-btn {
+  background: linear-gradient(135deg, #f59e0b 0%, #b45309 100%) !important;
+  box-shadow: 0 8px 0 #78350f, 0 12px 25px rgba(245, 158, 11, 0.45) !important;
+}
+
+.gold-trophy-icon {
+  color: #fbbf24;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.4));
+}
+
+.trophy-icon {
+  color: #fef08a;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
 .node-icon-inner {
   display: flex;
   align-items: center;
@@ -290,7 +299,7 @@
 }
 
 .lesson-emoji {
-  font-size: 2.1rem;
+  font-size: 2.3rem;
 }
 
 .check-icon {
@@ -303,50 +312,76 @@
   filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
 }
 
-/* Node Label Box directly tied to Node Capsule */
-.node-label-box {
+/* Spacious Label Card Directly Below Node */
+.vertical-label-card {
+  width: 100%;
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 18px;
+  padding: 10px 14px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(15, 23, 42, 0.88);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  padding: 4px 12px;
-  border-radius: 14px;
+  gap: 4px;
+  text-align: center;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
-  max-width: 140px;
-  text-align: center;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
 }
 
-.theme-light .node-label-box {
-  background: rgba(255, 255, 255, 0.95);
+.theme-light .vertical-label-card {
+  background: rgba(255, 255, 255, 0.96);
   border-color: rgba(0, 0, 0, 0.12);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
 }
 
-.node-label-box:hover {
-  transform: translateY(-1px);
+.vertical-label-card:hover {
+  transform: translateY(-2px);
   border-color: #10b981;
+  box-shadow: 0 10px 25px rgba(16, 185, 129, 0.25);
 }
 
-.node-label-title {
-  font-size: 0.8rem;
-  font-weight: 700;
-  color: #f8fafc;
+.label-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.label-title {
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #ffffff;
   line-height: 1.2;
 }
 
-.theme-light .node-label-title {
+.theme-light .label-title {
   color: #0f172a;
 }
 
-.node-label-words {
+.label-badge {
   font-size: 0.68rem;
+  font-weight: 700;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.18);
+  padding: 2px 8px;
+  border-radius: 8px;
+  border: 1px solid rgba(56, 189, 248, 0.35);
+}
+
+.trophy-badge {
+  color: #fbbf24;
+  background: rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+.label-sub-status {
+  font-size: 0.72rem;
   color: #94a3b8;
-  margin-top: 1px;
+  font-weight: 600;
 }
 
 /* Duolingo Popover Modal */
@@ -492,12 +527,8 @@
   background: rgba(255, 255, 255, 0.2);
 }
 
-/* Mobile Screen Adjustments */
+/* Mobile Screen Sizing */
 @media (max-width: 480px) {
-  .unit-path-container {
-    width: 290px;
-  }
-
   .unit-banner-card {
     padding: 16px;
     border-radius: 20px;
@@ -508,20 +539,19 @@
   }
 
   .duolingo-node-btn {
-    width: 70px;
-    height: 70px;
+    width: 74px;
+    height: 74px;
   }
 
   .lesson-emoji {
-    font-size: 1.9rem;
+    font-size: 2rem;
   }
 
-  .node-label-box {
-    max-width: 125px;
-    padding: 3px 10px;
+  .node-wrapper {
+    max-width: 220px;
   }
 
-  .node-label-title {
-    font-size: 0.76rem;
+  .label-title {
+    font-size: 0.85rem;
   }
 }
