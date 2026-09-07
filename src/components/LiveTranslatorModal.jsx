@@ -90,7 +90,7 @@ export function LiveTranslatorModal({ isOpen, onClose }) {
         <form className="translator-input-group" onSubmit={handleManualSubmit}>
           <textarea
             className="translator-textarea"
-            placeholder="הקלד כאן כל מילה או משפט חופשי (למשל: איפה יש מסעדה טובה?, כמה זה עולה?, Saan ang beach?)..."
+            placeholder="מה תרצה לתרגם?"
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             onKeyDown={(e) => {
