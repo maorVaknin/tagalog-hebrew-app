@@ -1,5 +1,5 @@
 import React, { useState, useMemo } from 'react';
-import { Search, Volume2, BookOpen, Filter, X, LayoutGrid, List, Sparkles, HelpCircle } from 'lucide-react';
+import { Search, Volume2, X, HelpCircle } from 'lucide-react';
 import { speakTagalog } from '../utils/audioTTS';
 import { comprehensiveDictionaryData } from '../data/dictionaryData';
 import './DictionaryView.css';
@@ -7,7 +7,6 @@ import './DictionaryView.css';
 export const DictionaryView = ({ courseData, onSelectLesson, onActivity }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [viewMode, setViewMode] = useState('cards'); // 'cards' | 'table'
 
   const handlePlayAudio = (text, e) => {
     if (e) e.stopPropagation();
@@ -117,7 +116,7 @@ export const DictionaryView = ({ courseData, onSelectLesson, onActivity }) => {
         </div>
       </div>
 
-      {/* Toolbar: Category Chips & View Toggle */}
+      {/* Toolbar: Single Row Scrollable Category Chips */}
       <div className="dict-toolbar-strip">
         <div className="dict-categories-scroll">
           {categories.map((cat, idx) => (
@@ -131,26 +130,6 @@ export const DictionaryView = ({ courseData, onSelectLesson, onActivity }) => {
             </button>
           ))}
         </div>
-
-        {/* Cards / Table View Toggle */}
-        <div className="dict-view-switcher">
-          <button 
-            className={`view-switch-btn ${viewMode === 'cards' ? 'active' : ''}`}
-            onClick={() => setViewMode('cards')}
-            title="תצוגת כרטיסיות מפורטות"
-          >
-            <LayoutGrid size={16} />
-            <span>כרטיסיות</span>
-          </button>
-          <button 
-            className={`view-switch-btn ${viewMode === 'table' ? 'active' : ''}`}
-            onClick={() => setViewMode('table')}
-            title="תצוגת טבלה מרוכזת"
-          >
-            <List size={16} />
-            <span>טבלה</span>
-          </button>
-        </div>
       </div>
 
       {/* Results Stats Counter */}
@@ -159,98 +138,59 @@ export const DictionaryView = ({ courseData, onSelectLesson, onActivity }) => {
         {searchTerm && <span className="query-notice">תוצאות עבור "{searchTerm}"</span>}
       </div>
 
-      {/* Content Rendering: Cards vs Table View */}
+      {/* Content Rendering: Responsive Cards Grid View */}
       {filteredResults.length > 0 ? (
-        viewMode === 'cards' ? (
-          /* Cards Grid View */
-          <div className="dictionary-grid">
-            {filteredResults.map(item => (
-              <div 
-                key={item.id || item.tagalog} 
-                className="dict-card glass-panel" 
-                onClick={(e) => handlePlayAudio(item.tagalog, e)}
-              >
-                <div className="dict-card-top">
-                  <span className="dict-badge">{item.category || 'כללי'}</span>
-                  {item.lessonTitle && <span className="dict-lesson-tag">{item.lessonTitle}</span>}
-                </div>
-
-                <div className="dict-main">
-                  <div className="dict-word-row">
-                    <h3 className="dict-tagalog">{item.tagalog}</h3>
-                    <button 
-                      className="dict-mini-audio-btn"
-                      onClick={(e) => handlePlayAudio(item.tagalog, e)}
-                      title="השמע הגייה"
-                    >
-                      <Volume2 size={20} />
-                    </button>
-                  </div>
-
-                  <div className="dict-phonetic">🗣️ {item.phoneticHebrew}</div>
-                  <div className="dict-hebrew">"{item.hebrew}"</div>
-                </div>
-
-                {item.exampleSentence && (
-                  <div className="dict-example-box">
-                    <div className="dict-ex-tagalog">{item.exampleSentence.tagalog}</div>
-                    <div className="dict-ex-hebrew">"{item.exampleSentence.hebrew}"</div>
-                  </div>
-                )}
-
-                {item.lessonRef && (
-                  <div className="dict-card-footer">
-                    <button 
-                      className="dict-practice-btn"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onSelectLesson(item.lessonRef);
-                      }}
-                    >
-                      לשיעור בכרטיסיות ←
-                    </button>
-                  </div>
-                )}
+        <div className="dictionary-grid">
+          {filteredResults.map(item => (
+            <div 
+              key={item.id || item.tagalog} 
+              className="dict-card glass-panel" 
+              onClick={(e) => handlePlayAudio(item.tagalog, e)}
+            >
+              <div className="dict-card-top">
+                <span className="dict-badge">{item.category || 'כללי'}</span>
+                {item.lessonTitle && <span className="dict-lesson-tag">{item.lessonTitle}</span>}
               </div>
-            ))}
-          </div>
-        ) : (
-          /* Table View */
-          <div className="dict-table-container glass-panel">
-            <table className="dict-table">
-              <thead>
-                <tr>
-                  <th>שמע</th>
-                  <th>טגלוג (Tagalog)</th>
-                  <th>תעתיק פונטי בעברית</th>
-                  <th>תרגום לעברית</th>
-                  <th>קטגוריה</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredResults.map(item => (
-                  <tr key={item.id || item.tagalog} onClick={(e) => handlePlayAudio(item.tagalog, e)}>
-                    <td className="td-audio">
-                      <button 
-                        className="dict-table-audio-btn"
-                        onClick={(e) => handlePlayAudio(item.tagalog, e)}
-                        title="השמע"
-                      >
-                        <Volume2 size={16} />
-                      </button>
-                    </td>
-                    <td className="td-tagalog">{item.tagalog}</td>
-                    <td className="td-phonetic">{item.phoneticHebrew}</td>
-                    <td className="td-hebrew">{item.hebrew}</td>
-                    <td className="td-category">
-                      <span className="table-cat-badge">{item.category || 'כללי'}</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )
+
+              <div className="dict-main">
+                <div className="dict-word-row">
+                  <h3 className="dict-tagalog">{item.tagalog}</h3>
+                  <button 
+                    className="dict-mini-audio-btn"
+                    onClick={(e) => handlePlayAudio(item.tagalog, e)}
+                    title="השמע הגייה"
+                  >
+                    <Volume2 size={20} />
+                  </button>
+                </div>
+
+                <div className="dict-phonetic">🗣️ {item.phoneticHebrew}</div>
+                <div className="dict-hebrew">"{item.hebrew}"</div>
+              </div>
+
+              {item.exampleSentence && (
+                <div className="dict-example-box">
+                  <div className="dict-ex-tagalog">{item.exampleSentence.tagalog}</div>
+                  <div className="dict-ex-hebrew">"{item.exampleSentence.hebrew}"</div>
+                </div>
+              )}
+
+              {item.lessonRef && (
+                <div className="dict-card-footer">
+                  <button 
+                    className="dict-practice-btn"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onSelectLesson(item.lessonRef);
+                    }}
+                  >
+                    לשיעור בכרטיסיות ←
+                  </button>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
       ) : (
         /* Empty Results Fallback */
         <div className="no-results-card glass-panel">

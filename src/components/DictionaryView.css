@@ -128,9 +128,7 @@
 .dict-toolbar-strip {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  flex-wrap: wrap;
+  width: 100%;
 }
 
 .dict-categories-scroll {
@@ -138,44 +136,53 @@
   align-items: center;
   gap: 8px;
   overflow-x: auto;
-  padding-bottom: 4px;
-  flex: 1;
-  scrollbar-width: thin;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  padding: 4px 2px 8px 2px;
+  width: 100%;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;  /* IE/Edge */
+}
+
+.dict-categories-scroll::-webkit-scrollbar {
+  display: none; /* Chrome, Safari, Opera */
 }
 
 .dict-chip-btn {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 6px 14px;
-  background: rgba(15, 23, 42, 0.6);
+  padding: 8px 16px;
+  background: rgba(15, 23, 42, 0.7);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 16px;
   color: #cbd5e1;
   font-family: inherit;
-  font-size: 0.82rem;
+  font-size: 0.85rem;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
   transition: all 0.2s ease;
 }
 
 .theme-light .dict-chip-btn {
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   border-color: rgba(0, 0, 0, 0.1);
   color: #475569;
 }
 
 .dict-chip-btn.active {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(56, 189, 248, 0.3) 100%);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.35) 0%, rgba(56, 189, 248, 0.35) 100%);
   border-color: #10b981;
   color: #ffffff;
-  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
 }
 
 .chip-count {
-  font-size: 0.7rem;
-  padding: 1px 6px;
+  font-size: 0.72rem;
+  padding: 2px 7px;
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.15);
 }
@@ -545,93 +552,12 @@
   }
 
   .dict-toolbar-strip {
-    flex-direction: column;
-    align-items: stretch;
-    gap: 10px;
-  }
-
-  .dict-categories-scroll {
-    flex-wrap: wrap;
-    overflow-x: visible;
-    justify-content: flex-start;
-    gap: 6px;
-    padding-bottom: 0;
+    width: 100%;
   }
 
   .dict-chip-btn {
-    padding: 5px 10px;
-    font-size: 0.78rem;
-    border-radius: 12px;
-  }
-
-  .dict-view-switcher {
-    align-self: center;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .view-switch-btn {
-    flex: 1;
-    justify-content: center;
-  }
-
-  /* Table styling for mobile: Convert table rows to mobile card layout (Zero Horizontal Scroll) */
-  .dict-table-container {
-    background: transparent;
-    border: none;
-    box-shadow: none;
-    overflow-x: visible;
-  }
-
-  .dict-table, .dict-table tbody, .dict-table tr, .dict-table td {
-    display: block;
-    width: 100%;
-  }
-
-  .dict-table thead {
-    display: none;
-  }
-
-  .dict-table tr {
-    position: relative;
-    margin-bottom: 12px;
-    background: rgba(15, 23, 42, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.16);
-    border-radius: 18px;
-    padding: 14px;
-    display: flex;
-    flex-direction: column;
-    gap: 6px;
-    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
-  }
-
-  .dict-table td {
-    padding: 0;
-    border: none;
-  }
-
-  .dict-table td.td-audio {
-    position: absolute;
-    left: 14px;
-    top: 14px;
-  }
-
-  .td-tagalog {
-    font-size: 1.15rem;
-    padding-left: 45px;
-  }
-
-  .td-phonetic {
-    font-size: 0.85rem;
-  }
-
-  .td-hebrew {
-    font-size: 0.95rem;
-    margin-top: 2px;
-  }
-
-  .table-cat-badge {
-    display: inline-block;
-    margin-top: 4px;
+    padding: 6px 12px;
+    font-size: 0.8rem;
+    border-radius: 14px;
   }
 }
