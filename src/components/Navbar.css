@@ -116,10 +116,10 @@
 }
 
 .brand-highlight {
-  background: linear-gradient(135deg, #10b981 0%, #38bdf8 100%);
+  background: linear-gradient(135deg, #10b981 0%, #34d399 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  margin-right: 2px;
+  margin-right: 1px;
 }
 
 .brand-badge-pro {
