@@ -182,35 +182,49 @@
 }
 
 .avatars-row {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(8, 1fr);
+  gap: 10px;
+  max-height: 230px;
+  overflow-y: auto;
+  padding: 10px;
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+}
+
+@media (max-width: 500px) {
+  .avatars-row {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
+    padding: 8px;
+  }
 }
 
 .avatar-option-btn {
-  width: 40px;
-  height: 40px;
-  font-size: 1.4rem;
+  width: 100%;
+  aspect-ratio: 1;
+  font-size: 1.5rem;
   background: rgba(255, 255, 255, 0.04);
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
+  border-radius: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 40px;
 }
 
 .avatar-option-btn:hover {
-  transform: scale(1.1);
-  background: rgba(16, 185, 129, 0.15);
+  transform: scale(1.12);
+  background: rgba(16, 185, 129, 0.18);
+  border-color: rgba(16, 185, 129, 0.4);
 }
 
 .avatar-option-btn.selected {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.3), rgba(56, 189, 248, 0.3));
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.35), rgba(56, 189, 248, 0.35));
   border-color: #10b981;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.5);
   transform: scale(1.08);
 }
 

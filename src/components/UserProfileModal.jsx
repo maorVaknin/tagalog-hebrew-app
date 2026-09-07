@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
-import { X, Award, Flame, CheckCircle, User, Mail, ShieldCheck, LogOut, Save } from 'lucide-react';
+import { X, Award, Flame, CheckCircle, ShieldCheck, Save, Sparkles } from 'lucide-react';
 import './UserProfileModal.css';
 
-const AVATARS = ['👤', '🌴', '🏄‍♂️', '🇵🇭', '👑', '⚡', '🦜', '🥥', '🎓', '🌺'];
+const AVATARS = [
+  '🐋', '🌴', '🏄‍♂️', '🏄‍♀️', '🇵🇭', '👑', '⚡', '🦜', '🥥', '🎓',
+  '🌺', '🦈', '🐬', '🏝️', '🌊', '✈️', '🍍', '🥭', '🦁', '🐯',
+  '🐼', '🦊', '🐉', '🦄', '🚀', '💎', '🦸‍♂️', '🦸‍♀️', '🧙‍♂️', '👾',
+  '🎯', '🎨', '🎧', '🎮', '🏆', '🔥', '🌟', '🌈', '🕶️', '🐱'
+];
 
 export function UserProfileModal({ isOpen, onClose, userStats, completedLessonsCount, userProfile, setUserProfile }) {
-  const [name, setName] = useState(userProfile?.name || 'לומד טגלוג');
-  const [email, setEmail] = useState(userProfile?.email || '');
-  const [selectedAvatar, setSelectedAvatar] = useState(userProfile?.avatar || '🌴');
+  const [selectedAvatar, setSelectedAvatar] = useState(userProfile?.avatar || '🐋');
   const [isSavedNotice, setIsSavedNotice] = useState(false);
 
   useEffect(() => {
     if (userProfile) {
-      setName(userProfile.name || 'לומד טגלוג');
-      setEmail(userProfile.email || '');
-      setSelectedAvatar(userProfile.avatar || '🌴');
+      setSelectedAvatar(userProfile.avatar || '🐋');
     }
   }, [userProfile]);
 
@@ -24,10 +25,7 @@ export function UserProfileModal({ isOpen, onClose, userStats, completedLessonsC
     e.preventDefault();
     const updated = {
       ...userProfile,
-      name: name.trim() || 'לומד טגלוג',
-      email: email.trim(),
       avatar: selectedAvatar,
-      isLoggedIn: true,
       updatedAt: new Date().toISOString()
     };
     setUserProfile(updated);
@@ -103,20 +101,23 @@ export function UserProfileModal({ isOpen, onClose, userStats, completedLessonsC
           </div>
         </div>
 
-        {/* Registration Form */}
+        {/* Registration / Avatar Selection Form */}
         <form className="profile-form" onSubmit={handleSaveProfile}>
-          <h3 className="form-section-title">פרטים אישיים ואווטאר</h3>
+          <h3 className="form-section-title">
+            <Sparkles size={16} className="inline-icon" />
+            <span>בחירת אווטאר אישי ({AVATARS.length} אפשרויות)</span>
+          </h3>
 
-          {/* Avatar Selector */}
+          {/* Avatar Selector Grid */}
           <div className="avatar-selector-box">
-            <label className="input-label">בחר אווטאר אישי:</label>
-            <div className="avatars-row">
+            <div className="avatars-row custom-scrollbar">
               {AVATARS.map((av) => (
                 <button
                   type="button"
                   key={av}
                   className={`avatar-option-btn ${selectedAvatar === av ? 'selected' : ''}`}
                   onClick={() => setSelectedAvatar(av)}
+                  title={`בחר אווטאר ${av}`}
                 >
                   {av}
                 </button>
@@ -124,48 +125,17 @@ export function UserProfileModal({ isOpen, onClose, userStats, completedLessonsC
             </div>
           </div>
 
-          {/* Name Field */}
-          <div className="form-group">
-            <label className="input-label">
-              <User size={16} />
-              <span>שם מלא / כינוי:</span>
-            </label>
-            <input
-              type="text"
-              className="profile-input"
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              placeholder="הכנס שם למעקב אחר התקדמות..."
-              required
-            />
-          </div>
-
-          {/* Email Field */}
-          <div className="form-group">
-            <label className="input-label">
-              <Mail size={16} />
-              <span>כתובת אימייל (לסנכרון עתידי):</span>
-            </label>
-            <input
-              type="email"
-              className="profile-input"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="your-name@example.com"
-            />
-          </div>
-
-          {/* Action Buttons */}
+          {/* Action Button */}
           <div className="profile-form-actions">
             <button type="submit" className="save-profile-btn">
               <Save size={18} />
-              <span>שמור והתחבר</span>
+              <span>שמור אווטאר</span>
             </button>
           </div>
 
           {isSavedNotice && (
             <div className="saved-notice-badge">
-              ✨ הפרופיל וההתקדמות נשמרו בהצלחה!
+              ✨ האווטאר וההתקדמות נשמרו בהצלחה!
             </div>
           )}
         </form>
