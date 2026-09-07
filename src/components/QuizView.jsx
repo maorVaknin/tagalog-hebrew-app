@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
-import { Volume2, CheckCircle2, XCircle, ArrowLeft } from 'lucide-react';
+import { Volume2, CheckCircle2, XCircle, ArrowLeft, RefreshCw } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { speakTagalog } from '../utils/audioTTS';
+import { updateWordRating } from '../utils/srsEngine';
 import './QuizView.css';
 
 export const QuizView = ({ lesson, onCompleteQuiz, onBackToSyllabus, onActivity }) => {
+  const [quizQueue, setQuizQueue] = useState(() => lesson.quiz ? [...lesson.quiz] : []);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
   const [isAnswered, setIsAnswered] = useState(false);
-  const [score, setScore] = useState(0);
+  const [firstTryCorrectCount, setFirstTryCorrectCount] = useState(0);
+  const [wrongRepeatsCount, setWrongRepeatsCount] = useState(0);
   const [isFinished, setIsFinished] = useState(false);
 
-  const questions = lesson.quiz || [];
-  const currentQuestion = questions[currentIndex];
+  const currentQuestion = quizQueue[currentIndex];
 
   const handlePlayAudio = (text) => {
     speakTagalog(text);
@@ -26,25 +28,45 @@ export const QuizView = ({ lesson, onCompleteQuiz, onBackToSyllabus, onActivity 
     if (onActivity) onActivity();
 
     const isCorrect = option === currentQuestion.correctAnswer;
+    const targetWord = {
+      tagalog: currentQuestion.correctAnswer,
+      hebrew: currentQuestion.questionHebrew || currentQuestion.explanationHebrew,
+      category: lesson.title
+    };
+
     if (isCorrect) {
-      setScore(prev => prev + 1);
+      if (!currentQuestion.isRepeat) {
+        setFirstTryCorrectCount(prev => prev + 1);
+      }
+      updateWordRating(targetWord, 'easy');
+    } else {
+      // תשובה שגויה - הגדרה כקשה והכנסה מחדש לסוף המבחן
+      updateWordRating(targetWord, 'hard');
+      setWrongRepeatsCount(prev => prev + 1);
+      setQuizQueue(prev => [
+        ...prev, 
+        { ...currentQuestion, isRepeat: true }
+      ]);
     }
   };
 
   const handleNext = () => {
-    if (currentIndex + 1 < questions.length) {
+    if (currentIndex + 1 < quizQueue.length) {
       setCurrentIndex(prev => prev + 1);
       setSelectedOption(null);
       setIsAnswered(false);
     } else {
       setIsFinished(true);
-      const xpEarned = Math.round((score / questions.length) * 50) + 10;
+      const initialTotal = lesson.quiz ? lesson.quiz.length : 1;
+      const successPercentage = Math.round((firstTryCorrectCount / initialTotal) * 100);
+      const xpEarned = Math.round((successPercentage / 100) * 50) + 15;
+      
       confetti({ particleCount: 100, spread: 80, origin: { y: 0.6 } });
       onCompleteQuiz(lesson.lessonId, xpEarned);
     }
   };
 
-  if (!questions || questions.length === 0) {
+  if (!lesson.quiz || lesson.quiz.length === 0) {
     return (
       <div className="quiz-container glass-panel animate-fade-in text-center">
         <h2>אין שאלות מבחן בשיעור זה עדיין</h2>
@@ -54,22 +76,31 @@ export const QuizView = ({ lesson, onCompleteQuiz, onBackToSyllabus, onActivity 
   }
 
   if (isFinished) {
-    const successPercentage = Math.round((score / questions.length) * 100);
+    const initialTotal = lesson.quiz.length;
+    const successPercentage = Math.round((firstTryCorrectCount / initialTotal) * 100);
     return (
       <div className="quiz-finished-card glass-panel animate-fade-in">
-        <div className="finish-badge">🎉</div>
-        <h2>סיימת את המבחן!</h2>
+        <div className="finish-badge">🏆</div>
+        <h2>סיימת את המבחן בהצלחה!</h2>
         <p className="finish-sub">שיעור: {lesson.title}</p>
 
         <div className="result-circle">
           <span className="res-num">{successPercentage}%</span>
-          <span className="res-lbl">{score} מתוך {questions.length} תשובות נכונות</span>
+          <span className="res-lbl">{firstTryCorrectCount} מתוך {initialTotal} תשובות נכונות בניסיון ראשון</span>
         </div>
+
+        {wrongRepeatsCount > 0 && (
+          <div className="quiz-repeat-summary-pill">
+            🔁 {wrongRepeatsCount} שאלות שגויות חזרו בסוף המבחן עד לשליטה מלאה!
+          </div>
+        )}
 
         <div className="finish-actions">
           <button className="quiz-btn secondary" onClick={() => {
+            setQuizQueue([...lesson.quiz]);
             setCurrentIndex(0);
-            setScore(0);
+            setFirstTryCorrectCount(0);
+            setWrongRepeatsCount(0);
             setIsFinished(false);
             setSelectedOption(null);
             setIsAnswered(false);
@@ -89,16 +120,23 @@ export const QuizView = ({ lesson, onCompleteQuiz, onBackToSyllabus, onActivity 
       <div className="quiz-topbar">
         <button className="back-link" onClick={onBackToSyllabus}>← יציאה מהמבחן</button>
         <div className="quiz-progress-text">
-          שאלה {currentIndex + 1} מתוך {questions.length}
+          שאלה {currentIndex + 1} מתוך {quizQueue.length}
         </div>
       </div>
 
       <div className="quiz-bar-container">
         <div 
           className="quiz-bar-fill" 
-          style={{ width: `${((currentIndex + 1) / questions.length) * 100}%` }}
+          style={{ width: `${((currentIndex + 1) / quizQueue.length) * 100}%` }}
         />
       </div>
+
+      {currentQuestion.isRepeat && (
+        <div className="quiz-repeat-notice animate-bounce">
+          <RefreshCw size={14} />
+          <span>שאלה זו חזרה לשליטה נוספת בעקבות טעות קודמת</span>
+        </div>
+      )}
 
       <div className="question-card glass-panel">
         <div className="question-type-badge">
@@ -157,7 +195,7 @@ export const QuizView = ({ lesson, onCompleteQuiz, onBackToSyllabus, onActivity 
         {isAnswered && (
           <div className={`explanation-card ${selectedOption === currentQuestion.correctAnswer ? 'exp-success' : 'exp-fail'}`}>
             <div className="exp-header">
-              {selectedOption === currentQuestion.correctAnswer ? '✨ תשובה נכונה מאוד!' : '❌ תשובה לא מדויקת'}
+              {selectedOption === currentQuestion.correctAnswer ? '✨ תשובה נכונה מאוד!' : '❌ תשובה לא מדויקת (תחזור בסוף המבחן)'}
             </div>
             <p className="exp-text">{currentQuestion.explanationHebrew}</p>
             
@@ -170,3 +208,5 @@ export const QuizView = ({ lesson, onCompleteQuiz, onBackToSyllabus, onActivity 
     </div>
   );
 };
+
+export default QuizView;

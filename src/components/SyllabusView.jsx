@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
-import { CheckCircle2, Play, Sparkles, Star, BookOpen, X, Trophy, Award, Lock } from 'lucide-react';
+import { CheckCircle2, Play, Sparkles, Star, BookOpen, X, Trophy, Award, Lock, RefreshCw, Flame } from 'lucide-react';
+import { getWeakWords } from '../utils/srsEngine';
 import './SyllabusView.css';
 
-export function SyllabusView({ courseData, completedLessons, onSelectLesson, onSelectQuiz, userStats }) {
+export function SyllabusView({ courseData, completedLessons, onSelectLesson, onSelectQuiz, userStats, onStartPracticeWeakWords }) {
   const [activePopoverLesson, setActivePopoverLesson] = useState(null);
+
+  const weakWords = getWeakWords();
 
   const handleNodeClick = (lesson) => {
     setActivePopoverLesson(lesson);
@@ -15,6 +18,27 @@ export function SyllabusView({ courseData, completedLessons, onSelectLesson, onS
 
   return (
     <div className="syllabus-container animate-fade-in" dir="rtl">
+      {/* Smart Weak Words Practice Hub Banner */}
+      {weakWords.length > 0 && (
+        <div className="weak-words-hub-banner glass-panel animate-scale-up">
+          <div className="hub-banner-content">
+            <div className="hub-badge-row">
+              <span className="hub-pill">🧠 אימון אדפטיבי חכם</span>
+              <span className="hub-count">{weakWords.length} מילים לחיזוק</span>
+            </div>
+            <h3 className="hub-title">יש לך מילים שסומנו כקשות/בינוניות!</h3>
+            <p className="hub-sub">חזק את הזיכרון שלך בלמידה מרוכזת של המילים שלקח לך יותר זמן לשלוט בהן.</p>
+          </div>
+          <button 
+            className="hub-practice-btn"
+            onClick={() => onStartPracticeWeakWords && onStartPracticeWeakWords()}
+          >
+            <Sparkles size={18} />
+            <span>התחל אימון מילים קשות ←</span>
+          </button>
+        </div>
+      )}
+
       {/* Interactive Vertical Learning Path */}
       <div className="duolingo-path-wrapper">
         {courseData.units.map((unit, unitIdx) => {

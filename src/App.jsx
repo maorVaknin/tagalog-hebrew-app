@@ -16,6 +16,7 @@ import WelcomeSplash from './components/WelcomeSplash';
 import AuthModal from './components/AuthModal';
 import LiveTranslatorModal from './components/LiveTranslatorModal';
 import { getActiveUser, saveUserDataToCloud, registerUser, loginUser, logoutUser } from './utils/firebase';
+import { createWeakWordsLesson } from './utils/srsEngine';
 
 export function App() {
   const [currentTab, setCurrentTab] = useState('syllabus');
@@ -176,6 +177,14 @@ export function App() {
     setCurrentTab('quiz');
   };
 
+  const handleStartPracticeWeakWords = () => {
+    const weakLesson = createWeakWordsLesson();
+    if (weakLesson) {
+      setActiveLesson(weakLesson);
+      setCurrentTab('flashcards');
+    }
+  };
+
   const handleToggleSimulator = () => {
     setIsSimulated(prev => !prev);
   };
@@ -239,6 +248,7 @@ export function App() {
             onSelectLesson={startLessonFlashcards}
             onSelectQuiz={startLessonQuiz}
             userStats={userStats}
+            onStartPracticeWeakWords={handleStartPracticeWeakWords}
           />
         )}
 

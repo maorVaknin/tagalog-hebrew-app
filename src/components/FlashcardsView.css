@@ -65,6 +65,20 @@
   transition: width 0.3s ease;
 }
 
+.adaptive-repeat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(245, 158, 11, 0.18);
+  border: 1px solid rgba(245, 158, 11, 0.4);
+  color: #fbbf24;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin: 0 auto 12px auto;
+}
+
 /* 3D Flip Card Scene */
 .card-scene {
   perspective: 1200px;

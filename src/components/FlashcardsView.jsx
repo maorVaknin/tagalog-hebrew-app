@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Volume2, RotateCw, CheckCircle, ArrowRight, ArrowLeft, Sparkles, AlertCircle } from 'lucide-react';
+import { Volume2, RotateCw, CheckCircle, ArrowRight, ArrowLeft, Sparkles, AlertCircle, RefreshCw, Layers } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { speakTagalog } from '../utils/audioTTS';
+import { updateWordRating } from '../utils/srsEngine';
 import './FlashcardsView.css';
 
 // Helper function to split main translation from parenthesis notes
@@ -15,15 +16,18 @@ const parseHebrewTranslation = (rawHebrew) => {
 };
 
 export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onStartQuiz, onActivity }) => {
+  // תור אדפטיבי (Adaptive Dynamic Queue)
+  const [queue, setQueue] = useState(() => lesson.vocabulary.map(v => ({ ...v, lessonId: lesson.lessonId })));
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [speechRate] = useState(1.0);
   const [masteredIds, setMasteredIds] = useState(new Set());
+  const [repeatCount, setRepeatCount] = useState(0);
   const [isCompleted, setIsCompleted] = useState(false);
   const [audioHintVisible, setAudioHintVisible] = useState(false);
 
-  const currentVocab = lesson.vocabulary[currentIndex];
+  const currentVocab = queue[currentIndex] || lesson.vocabulary[0];
   const { main: mainHebrew, note: hebrewNote } = parseHebrewTranslation(currentVocab?.hebrew);
 
   const handlePlayAudio = (text, e) => {
@@ -45,24 +49,52 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
   const handleRating = (rating) => {
     setIsFlipped(false);
     if (onActivity) onActivity();
+
+    // 1. שמירת דירוג המילה ב-SRS Database
+    updateWordRating(currentVocab, rating);
+
+    let updatedQueue = [...queue];
+
     if (rating === 'easy') {
+      // מילה שנשלטה - סימון כנשלטת
       const updated = new Set(masteredIds);
-      updated.add(currentVocab.id);
+      updated.add(currentVocab.id || currentVocab.tagalog);
       setMasteredIds(updated);
+    } else if (rating === 'hard') {
+      // מילה קשה - הכנסה מחדש לתור במרחק 2-3 כרטיסיות
+      const reinsertIndex = Math.min(currentIndex + 3, updatedQueue.length);
+      updatedQueue.splice(reinsertIndex, 0, { 
+        ...currentVocab, 
+        isRepeat: true, 
+        repeatReason: '🔴 מילה קשה - חזרה נוספת' 
+      });
+      setQueue(updatedQueue);
+      setRepeatCount(prev => prev + 1);
+    } else if (rating === 'medium') {
+      // מילה בינונית - הכנסה מחדש לסוף התור
+      updatedQueue.push({ 
+        ...currentVocab, 
+        isRepeat: true, 
+        repeatReason: '🟡 מילה בינונית - חיזוק בסוף' 
+      });
+      setQueue(updatedQueue);
+      setRepeatCount(prev => prev + 1);
     }
 
-    if (currentIndex + 1 < lesson.vocabulary.length) {
-      setTimeout(() => setCurrentIndex(currentIndex + 1), 200);
+    // מעבר לכרטיסייה הבאה בתור
+    if (currentIndex + 1 < updatedQueue.length) {
+      setTimeout(() => setCurrentIndex(currentIndex + 1), 150);
     } else {
       setIsCompleted(true);
-      confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
-      onCompleteLesson(lesson.lessonId, 30 + masteredIds.size * 5);
+      confetti({ particleCount: 90, spread: 80, origin: { y: 0.6 } });
+      const earnedXP = 30 + masteredIds.size * 5 + repeatCount * 2;
+      onCompleteLesson(lesson.lessonId, earnedXP);
     }
   };
 
   const handleNext = () => {
     setIsFlipped(false);
-    if (currentIndex + 1 < lesson.vocabulary.length) {
+    if (currentIndex + 1 < queue.length) {
       setCurrentIndex(currentIndex + 1);
     } else {
       setIsCompleted(true);
@@ -77,21 +109,30 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
   };
 
   if (isCompleted) {
+    const totalVocab = lesson.vocabulary.length;
     return (
       <div className="flashcard-completion glass-panel animate-fade-in">
         <div className="completion-icon">🏆</div>
-        <h2>כל הכבוד! סיימת את הכרטיסיות!</h2>
-        <p className="completion-sub">למדת את כל {lesson.vocabulary.length} המילים בשיעור "{lesson.title}".</p>
+        <h2>סיימת את השיעור בהצלחה מלאה!</h2>
+        <p className="completion-sub">
+          תרגלת את כל {totalVocab} המילים בשיעור "{lesson.title}". המילים הקשות והבינוניות עברו חזרות מותאמות עד לשליטה!
+        </p>
         
         <div className="completion-stats">
           <div className="comp-stat-card">
-            <span className="comp-stat-val">+{30 + masteredIds.size * 5}</span>
+            <span className="comp-stat-val">+{30 + masteredIds.size * 5 + repeatCount * 2}</span>
             <span className="comp-stat-lbl">נקודות XP נצברו</span>
           </div>
           <div className="comp-stat-card">
-            <span className="comp-stat-val">{masteredIds.size} / {lesson.vocabulary.length}</span>
+            <span className="comp-stat-val">{masteredIds.size} / {totalVocab}</span>
             <span className="comp-stat-lbl">מילים נשלטו בציון "קל"</span>
           </div>
+          {repeatCount > 0 && (
+            <div className="comp-stat-card highlight">
+              <span className="comp-stat-val">🔁 {repeatCount}</span>
+              <span className="comp-stat-lbl">חזרות אדפטיביות שבוצעו</span>
+            </div>
+          )}
         </div>
 
         <div className="completion-actions">
@@ -116,7 +157,7 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
         <div className="lesson-info">
           <h3>{lesson.title}</h3>
           <span className="progress-counter">
-            כרטיסייה {currentIndex + 1} מתוך {lesson.vocabulary.length}
+            כרטיסייה {currentIndex + 1} מתוך {queue.length} בתור
           </span>
         </div>
       </div>
@@ -124,9 +165,17 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
       <div className="progress-bar-container">
         <div 
           className="progress-bar-fill" 
-          style={{ width: `${((currentIndex + 1) / lesson.vocabulary.length) * 100}%` }}
+          style={{ width: `${Math.min(100, ((currentIndex + 1) / queue.length) * 100)}%` }}
         />
       </div>
+
+      {/* תווית חזרה אדפטיבית */}
+      {currentVocab.isRepeat && (
+        <div className="adaptive-repeat-pill animate-bounce">
+          <RefreshCw size={14} />
+          <span>{currentVocab.repeatReason}</span>
+        </div>
+      )}
 
       <div className="card-scene">
         <div 
@@ -135,7 +184,7 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
         >
           {/* Card Front: Tagalog Word & Pronunciation */}
           <div className="card-side card-front glass-panel">
-            <div className="card-badge">{currentVocab.category}</div>
+            <div className="card-badge">{currentVocab.category || 'כללי'}</div>
             
             <div className="card-main-content">
               <h1 className="tagalog-heading">{currentVocab.tagalog}</h1>
@@ -205,10 +254,10 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
               <span className="rating-title">איך הרגשת עם המילה הזו?</span>
               <div className="rating-grid">
                 <button className="rate-btn hard" onClick={() => handleRating('hard')}>
-                  🔴 קשה (שוב)
+                  🔴 קשה (שוב בקרוב)
                 </button>
                 <button className="rate-btn medium" onClick={() => handleRating('medium')}>
-                  🟡 בינוני
+                  🟡 בינוני (חזרה בסוף)
                 </button>
                 <button className="rate-btn easy" onClick={() => handleRating('easy')}>
                   🟢 קל (שולט!)
