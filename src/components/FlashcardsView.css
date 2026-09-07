@@ -519,5 +519,72 @@
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 6px;
+}
+
+/* Dedicated Post-Lesson Unknown Words Focus Box */
+.unknown-words-focus-box {
+  margin: 20px 0;
+  padding: 18px 20px;
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.2) 0%, rgba(239, 68, 68, 0.2) 100%);
+  border: 1px solid rgba(245, 158, 11, 0.45);
+  box-shadow: 0 10px 30px rgba(245, 158, 11, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: right;
+}
+
+.focus-box-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.focus-icon-gold {
+  color: #fbbf24;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.focus-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text-main-dark, #f8fafc);
+  margin: 0 0 4px 0;
+}
+
+.theme-light .focus-title {
+  color: var(--text-main-light, #0f172a);
+}
+
+.focus-desc {
+  font-size: 0.84rem;
+  color: var(--text-sub-dark, #cbd5e1);
+  margin: 0;
+}
+
+.unknown-focus-btn {
+  width: 100%;
+  padding: 12px 18px;
+  border-radius: 16px;
+  background: linear-gradient(90deg, #f59e0b, #ef4444);
+  color: #ffffff;
+  font-family: inherit;
+  font-weight: 800;
+  font-size: 0.92rem;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.35);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.unknown-focus-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5);
 }

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { Volume2, RotateCw, CheckCircle, ArrowRight, ArrowLeft, Sparkles, AlertCircle, RefreshCw, Layers } from 'lucide-react';
+import { Volume2, RotateCw, CheckCircle, ArrowRight, ArrowLeft, Sparkles, AlertCircle, RefreshCw, Layers, BookmarkPlus } from 'lucide-react';
 import confetti from 'canvas-confetti';
 import { speakTagalog } from '../utils/audioTTS';
-import { updateWordRating } from '../utils/srsEngine';
+import { updateWordRating, createCustomReviewLesson } from '../utils/srsEngine';
 import './FlashcardsView.css';
 
 // Helper function to split main translation from parenthesis notes
@@ -15,7 +15,7 @@ const parseHebrewTranslation = (rawHebrew) => {
   return { main: rawHebrew, note: '' };
 };
 
-export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onStartQuiz, onActivity }) => {
+export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onStartQuiz, onActivity, onStartCustomReview }) => {
   // תור אדפטיבי (Adaptive Dynamic Queue)
   const [queue, setQueue] = useState(() => lesson.vocabulary.map(v => ({ ...v, lessonId: lesson.lessonId })));
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -28,6 +28,7 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
   const [audioHintVisible, setAudioHintVisible] = useState(false);
 
   const [initialRatings, setInitialRatings] = useState({});
+  const [sessionUnknownWords, setSessionUnknownWords] = useState([]);
 
   const currentVocab = queue[currentIndex] || lesson.vocabulary[0];
   const { main: mainHebrew, note: hebrewNote } = parseHebrewTranslation(currentVocab?.hebrew);
@@ -59,7 +60,15 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
       setInitialRatings(prev => ({ ...prev, [vocabId]: rating }));
     }
 
-    // 2. שמירת דירוג המילה ב-SRS Database
+    // 2. הוספה למאגר המילים שלא ידעתי בסשן
+    if (rating === 'hard' || rating === 'medium') {
+      setSessionUnknownWords(prev => {
+        const exists = prev.some(w => (w.id || w.tagalog) === vocabId);
+        return exists ? prev : [...prev, currentVocab];
+      });
+    }
+
+    // 3. שמירת דירוג המילה ב-SRS Database
     updateWordRating(currentVocab, rating);
 
     let updatedQueue = [...queue];
@@ -197,6 +206,34 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
             </div>
           )}
         </div>
+
+        {/* Dedicated Post-Lesson Focus Review for Unknown Words */}
+        {sessionUnknownWords.length > 0 && (
+          <div className="unknown-words-focus-box glass-panel animate-scale-up">
+            <div className="focus-box-header">
+              <BookmarkPlus size={22} className="focus-icon-gold" />
+              <div>
+                <h4 className="focus-title">נשמרו {sessionUnknownWords.length} מילים במאגר "לא ידעתי"!</h4>
+                <p className="focus-desc">רוצה לתרגל עכשיו בנפרד רק את המילים שלא ידעת בשיעור זה?</p>
+              </div>
+            </div>
+            <button 
+              className="action-btn unknown-focus-btn"
+              onClick={() => {
+                const customLesson = createCustomReviewLesson(
+                  sessionUnknownWords, 
+                  `🔥 תרגול מופרד: ${sessionUnknownWords.length} מילים שלא ידעת בשיעור`
+                );
+                if (onStartCustomReview) {
+                  onStartCustomReview(customLesson);
+                }
+              }}
+            >
+              <Sparkles size={18} />
+              <span>התחל תרגול מופרד ממוקד ({sessionUnknownWords.length} מילים) ←</span>
+            </button>
+          </div>
+        )}
 
         <div className="completion-actions">
           <button className="action-btn secondary" onClick={onBackToSyllabus}>

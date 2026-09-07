@@ -185,6 +185,13 @@ export function App() {
     }
   };
 
+  const handleStartCustomReview = (customLesson) => {
+    if (customLesson) {
+      setActiveLesson(customLesson);
+      setCurrentTab('flashcards');
+    }
+  };
+
   const handleToggleSimulator = () => {
     setIsSimulated(prev => !prev);
   };
@@ -271,6 +278,7 @@ export function App() {
             onBackToSyllabus={() => setCurrentTab('syllabus')}
             onStartQuiz={startLessonQuiz}
             onActivity={() => handleRecordActivity(10)}
+            onStartCustomReview={handleStartCustomReview}
           />
         )}
 
