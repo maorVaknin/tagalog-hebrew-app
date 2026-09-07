@@ -156,20 +156,29 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
           <div className="grade-label">{gradeLabel}</div>
         </div>
         
-        {/* Detailed Breakdown Stats */}
+        {/* Detailed Breakdown Stats - Conditional rendering of categories > 0 */}
         <div className="rating-breakdown-grid">
-          <div className="breakdown-stat-box easy">
-            <span className="b-val">🟢 {easyCount}</span>
-            <span className="b-lbl">קלה (שליטה מיידית)</span>
-          </div>
-          <div className="breakdown-stat-box medium">
-            <span className="b-val">🟡 {mediumCount}</span>
-            <span className="b-lbl">בינונית (חזרה בסוף)</span>
-          </div>
-          <div className="breakdown-stat-box hard">
-            <span className="b-val">🔴 {hardCount}</span>
-            <span className="b-lbl">קשה (חזרות מרובות)</span>
-          </div>
+          {easyCount > 0 && (
+            <div className="breakdown-stat-box easy">
+              <span className="b-val">🟢 {easyCount} מתוך {totalVocab}</span>
+              <span className="b-pct">({Math.round((easyCount / totalVocab) * 100)}%)</span>
+              <span className="b-lbl">קלה (שליטה מיידית)</span>
+            </div>
+          )}
+          {mediumCount > 0 && (
+            <div className="breakdown-stat-box medium">
+              <span className="b-val">🟡 {mediumCount} מתוך {totalVocab}</span>
+              <span className="b-pct">({Math.round((mediumCount / totalVocab) * 100)}%)</span>
+              <span className="b-lbl">בינונית (חזרה בסוף)</span>
+            </div>
+          )}
+          {hardCount > 0 && (
+            <div className="breakdown-stat-box hard">
+              <span className="b-val">🔴 {hardCount} מתוך {totalVocab}</span>
+              <span className="b-pct">({Math.round((hardCount / totalVocab) * 100)}%)</span>
+              <span className="b-lbl">קשה (חזרות מרובות)</span>
+            </div>
+          )}
         </div>
 
         <div className="completion-stats">

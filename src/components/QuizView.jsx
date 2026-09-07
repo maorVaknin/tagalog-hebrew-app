@@ -105,20 +105,22 @@ export const QuizView = ({ lesson, onCompleteQuiz, onBackToSyllabus, onActivity 
           <div className="grade-label">{gradeLabel}</div>
         </div>
 
-        {/* Quiz Breakdown Stats */}
+        {/* Quiz Breakdown Stats - Dynamic rendering for >0 categories */}
         <div className="rating-breakdown-grid">
-          <div className="breakdown-stat-box easy">
-            <span className="b-val">🟢 {firstTryCorrectCount}</span>
-            <span className="b-lbl">נכון מניסיון ראשון</span>
-          </div>
-          <div className="breakdown-stat-box hard">
-            <span className="b-val">🔴 {wrongCount}</span>
-            <span className="b-lbl">שגוי (תוקן בסוף)</span>
-          </div>
-          <div className="breakdown-stat-box medium">
-            <span className="b-val">🔁 {wrongRepeatsCount}</span>
-            <span className="b-lbl">סך חזרות אדפטיביות</span>
-          </div>
+          {firstTryCorrectCount > 0 && (
+            <div className="breakdown-stat-box easy">
+              <span className="b-val">🟢 {firstTryCorrectCount} מתוך {initialTotal}</span>
+              <span className="b-pct">({Math.round((firstTryCorrectCount / initialTotal) * 100)}%)</span>
+              <span className="b-lbl">נכון מניסיון ראשון</span>
+            </div>
+          )}
+          {wrongCount > 0 && (
+            <div className="breakdown-stat-box hard">
+              <span className="b-val">🔴 {wrongCount} מתוך {initialTotal}</span>
+              <span className="b-pct">({Math.round((wrongCount / initialTotal) * 100)}%)</span>
+              <span className="b-lbl">שגוי (תוקן בסוף המבחן)</span>
+            </div>
+          )}
         </div>
 
         {wrongRepeatsCount > 0 && (
