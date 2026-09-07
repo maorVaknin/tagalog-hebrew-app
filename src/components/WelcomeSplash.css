@@ -1,4 +1,4 @@
-/* Welcome Splash Screen Styles with Ultra-Sheer Glass & Clear Background */
+/* Welcome Splash Screen Styles with Ultra-Sheer Glass & Onboarding Auth Form */
 
 .welcome-splash-wrapper {
   position: fixed;
@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: center;
   padding: 1.25rem;
-  overflow: hidden;
+  overflow-y: auto;
   direction: rtl;
   user-select: none;
 }
@@ -38,7 +38,7 @@
 .splash-overlay-gradient {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.12) 0%, rgba(2, 6, 23, 0.35) 100%);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.25) 0%, rgba(2, 6, 23, 0.55) 100%);
   animation: overlay-fade 1.2s ease-out forwards;
 }
 
@@ -52,29 +52,29 @@
   position: relative;
   z-index: 10;
   width: 100%;
-  max-width: 480px;
-  padding: 2.25rem 2rem;
-  background: rgba(15, 23, 42, 0.28); /* Highly Transparent Glass */
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 36px;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4),
+  max-width: 440px;
+  padding: 2rem 1.75rem;
+  background: rgba(15, 23, 42, 0.45); /* Transparent Dark Glass */
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 32px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5),
               0 0 1px rgba(255, 255, 255, 0.4) inset;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
   color: #ffffff;
-  animation: card-float-entrance 1s cubic-bezier(0.16, 1, 0.3, 1) 0.5s backwards;
+  animation: card-float-entrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 @keyframes card-float-entrance {
   0% {
     opacity: 0;
-    transform: translateY(50px) scale(0.92);
-    filter: blur(8px);
+    transform: translateY(40px) scale(0.95);
+    filter: blur(6px);
   }
   100% {
     opacity: 1;
@@ -88,51 +88,40 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1rem;
+  gap: 0.75rem;
 }
 
 .splash-logo-container {
   position: relative;
-  width: 90px;
-  height: 90px;
-  border-radius: 28px;
+  width: 80px;
+  height: 80px;
+  border-radius: 24px;
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.4) 0%, rgba(56, 189, 248, 0.4) 100%);
   border: 2px solid rgba(255, 255, 255, 0.6);
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 6px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
   animation: logo-float 3s ease-in-out infinite 1.5s;
 }
 
 @keyframes logo-float {
   0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-8px) rotate(-2deg); }
+  50% { transform: translateY(-6px) rotate(-2deg); }
 }
 
 .splash-logo-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 24px;
+  border-radius: 20px;
   display: block;
-}
-
-.splash-flag {
-  font-size: 2.5rem;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
-}
-
-.splash-palm {
-  font-size: 2.2rem;
-  filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.4));
 }
 
 .splash-ring {
   position: absolute;
-  inset: -6px;
-  border-radius: 32px;
+  inset: -5px;
+  border-radius: 28px;
   border: 2px solid #10b981;
   animation: pulse-ring-logo 2s infinite 1.5s;
   pointer-events: none;
@@ -140,7 +129,7 @@
 
 @keyframes pulse-ring-logo {
   0% { transform: scale(1); opacity: 0.8; }
-  100% { transform: scale(1.15); opacity: 0; }
+  100% { transform: scale(1.12); opacity: 0; }
 }
 
 .splash-brand-titles {
@@ -151,15 +140,14 @@
 
 .splash-main-title {
   font-family: 'Outfit', 'Rubik', sans-serif;
-  font-size: 2.1rem;
+  font-size: 1.9rem;
   font-weight: 800;
-  letter-spacing: -0.5px;
   margin: 0;
   display: flex;
   align-items: center;
   gap: 6px;
   color: #ffffff;
-  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.9), 0 0 20px rgba(0, 0, 0, 0.7);
+  text-shadow: 0 3px 12px rgba(0, 0, 0, 0.9);
 }
 
 .splash-highlight {
@@ -170,23 +158,21 @@
 }
 
 .splash-pro-chip {
-  font-size: 0.72rem;
+  font-size: 0.68rem;
   font-weight: 800;
   letter-spacing: 1px;
-  padding: 3px 8px;
-  border-radius: 8px;
+  padding: 2px 7px;
+  border-radius: 6px;
   background: rgba(245, 158, 11, 0.4);
   color: #fbbf24;
   border: 1px solid rgba(251, 191, 36, 0.6);
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
 }
 
 .splash-sub-title {
-  font-size: 0.95rem;
+  font-size: 0.88rem;
   color: #ffffff;
   font-weight: 600;
-  margin-top: 4px;
+  margin-top: 3px;
   text-shadow: 0 2px 8px rgba(0, 0, 0, 0.9);
 }
 
@@ -195,52 +181,249 @@
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 8px;
+  gap: 6px;
   width: 100%;
 }
 
 .splash-feat-pill {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 7px 14px;
-  background: rgba(15, 23, 42, 0.45);
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  border-radius: 20px;
-  font-size: 0.82rem;
+  gap: 5px;
+  padding: 5px 12px;
+  background: rgba(15, 23, 42, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+  font-size: 0.78rem;
   font-weight: 700;
   color: #ffffff;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.8);
+}
+
+/* ------------------------------------------------ */
+/* RETURNING USER CARD                              */
+/* ------------------------------------------------ */
+.splash-returning-user-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.1rem;
+  padding: 1.2rem;
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 24px;
+}
+
+.welcome-user-avatar {
+  font-size: 3.2rem;
+  background: rgba(16, 185, 129, 0.2);
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid rgba(16, 185, 129, 0.6);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.welcome-user-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.welcome-user-greeting {
+  font-size: 0.85rem;
+  color: #94a3b8;
+  font-weight: 600;
+}
+
+.welcome-user-name {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+.welcome-user-stats {
+  display: flex;
+  gap: 8px;
+  margin-top: 6px;
+}
+
+.user-stat-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.xp-chip {
+  background: rgba(245, 158, 11, 0.25);
+  color: #fbbf24;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.streak-chip {
+  background: rgba(239, 68, 68, 0.25);
+  color: #f87171;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+}
+
+.splash-switch-account-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.splash-switch-account-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* ------------------------------------------------ */
+/* FIRST-TIME USER ONBOARDING FORM                  */
+/* ------------------------------------------------ */
+.splash-onboarding-card {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.splash-auth-tabs {
+  display: flex;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 16px;
+  padding: 4px;
+  gap: 4px;
+}
+
+.auth-tab-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: #94a3b8;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.auth-tab-btn.active {
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.3) 0%, rgba(56, 189, 248, 0.3) 100%);
+  color: #ffffff;
+  border: 1px solid rgba(16, 185, 129, 0.5);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.splash-auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 100%;
+}
+
+.splash-input-group {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.splash-input-group .input-icon {
+  position: absolute;
+  right: 14px;
+  color: rgba(255, 255, 255, 0.6);
+  pointer-events: none;
+}
+
+.splash-input-group input {
+  width: 100%;
+  padding: 12px 42px 12px 14px;
+  background: rgba(15, 23, 42, 0.75);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 14px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.92rem;
+  font-weight: 600;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.splash-input-group input:focus {
+  border-color: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.splash-input-group input::placeholder {
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.splash-auth-error {
+  background: rgba(239, 68, 68, 0.25);
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  color: #fca5a5;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-align: center;
 }
 
 /* Enter Button */
 .splash-enter-btn {
   position: relative;
   width: 100%;
-  padding: 16px 24px;
+  padding: 14px 20px;
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
   color: #ffffff;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  border-radius: 22px;
+  border-radius: 18px;
   font-family: inherit;
-  font-size: 1.18rem;
+  font-size: 1.05rem;
   font-weight: 800;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  box-shadow: 0 12px 35px rgba(16, 185, 129, 0.55),
+  gap: 8px;
+  box-shadow: 0 10px 30px rgba(16, 185, 129, 0.5),
               0 4px 15px rgba(0, 0, 0, 0.4);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  margin-top: 4px;
 }
 
 .splash-enter-btn:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 16px 45px rgba(16, 185, 129, 0.7);
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 14px 40px rgba(16, 185, 129, 0.65);
 }
 
 .splash-enter-btn:active {
@@ -251,12 +434,30 @@
   fill: currentColor;
 }
 
+.splash-guest-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 14px;
+  color: rgba(255, 255, 255, 0.8);
+  padding: 9px 14px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.splash-guest-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+}
+
 .splash-footer-note {
   display: flex;
   align-items: center;
-  gap: 6px;
-  font-size: 0.78rem;
-  color: #ffffff;
+  gap: 5px;
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.8);
   font-weight: 600;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.9);
 }
@@ -264,17 +465,17 @@
 /* Mobile Screen Sizing */
 @media (max-width: 480px) {
   .splash-glass-card {
-    padding: 1.75rem 1.25rem;
-    border-radius: 28px;
-    gap: 1.2rem;
+    padding: 1.5rem 1.1rem;
+    border-radius: 26px;
+    gap: 1rem;
   }
 
   .splash-main-title {
-    font-size: 1.7rem;
+    font-size: 1.6rem;
   }
 
   .splash-enter-btn {
-    padding: 14px 20px;
-    font-size: 1.08rem;
+    padding: 13px 18px;
+    font-size: 1rem;
   }
 }

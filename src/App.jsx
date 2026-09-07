@@ -14,7 +14,7 @@ import MobileSimulator from './components/MobileSimulator';
 import UserProfileModal from './components/UserProfileModal';
 import WelcomeSplash from './components/WelcomeSplash';
 import AuthModal from './components/AuthModal';
-import { getActiveUser, saveUserDataToCloud } from './utils/firebase';
+import { getActiveUser, saveUserDataToCloud, registerUser, loginUser, logoutUser } from './utils/firebase';
 
 export function App() {
   const [currentTab, setCurrentTab] = useState('syllabus');
@@ -186,7 +186,29 @@ export function App() {
       )}
 
       {showSplash && (
-        <WelcomeSplash onEnterApp={() => setShowSplash(false)} />
+        <WelcomeSplash 
+          activeCloudUser={activeCloudUser}
+          onEnterApp={() => setShowSplash(false)}
+          onRegister={async (email, password, name) => {
+            const res = await registerUser(email, password, name);
+            if (res.success) {
+              handleCloudUserChange(res.user);
+            }
+            return res;
+          }}
+          onLogin={async (email, password) => {
+            const res = await loginUser(email, password);
+            if (res.success) {
+              handleCloudUserChange(res.user);
+            }
+            return res;
+          }}
+          onGuestContinue={() => setShowSplash(false)}
+          onLogout={async () => {
+            await logoutUser();
+            handleCloudUserChange(null);
+          }}
+        />
       )}
 
       <Navbar 
