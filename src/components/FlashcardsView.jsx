@@ -27,6 +27,8 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
   const [isCompleted, setIsCompleted] = useState(false);
   const [audioHintVisible, setAudioHintVisible] = useState(false);
 
+  const [initialRatings, setInitialRatings] = useState({});
+
   const currentVocab = queue[currentIndex] || lesson.vocabulary[0];
   const { main: mainHebrew, note: hebrewNote } = parseHebrewTranslation(currentVocab?.hebrew);
 
@@ -50,7 +52,14 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
     setIsFlipped(false);
     if (onActivity) onActivity();
 
-    // 1. שמירת דירוג המילה ב-SRS Database
+    const vocabId = currentVocab.id || currentVocab.tagalog;
+
+    // 1. תיעוד דירוג ראשוני למילה זו
+    if (!initialRatings[vocabId]) {
+      setInitialRatings(prev => ({ ...prev, [vocabId]: rating }));
+    }
+
+    // 2. שמירת דירוג המילה ב-SRS Database
     updateWordRating(currentVocab, rating);
 
     let updatedQueue = [...queue];
@@ -58,7 +67,7 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
     if (rating === 'easy') {
       // מילה שנשלטה - סימון כנשלטת
       const updated = new Set(masteredIds);
-      updated.add(currentVocab.id || currentVocab.tagalog);
+      updated.add(vocabId);
       setMasteredIds(updated);
     } else if (rating === 'hard') {
       // מילה קשה - הכנסה מחדש לתור במרחק 2-3 כרטיסיות
@@ -110,6 +119,27 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
 
   if (isCompleted) {
     const totalVocab = lesson.vocabulary.length;
+    const ratingsArray = Object.values(initialRatings);
+    const easyCount = ratingsArray.filter(r => r === 'easy').length;
+    const mediumCount = ratingsArray.filter(r => r === 'medium').length;
+    const hardCount = ratingsArray.filter(r => r === 'hard').length;
+
+    // חישוב ציון משוקלל מתוך 100
+    const rawScore = totalVocab > 0
+      ? Math.round(((easyCount * 100 + mediumCount * 70 + hardCount * 40) / totalVocab))
+      : 100;
+    const finalGrade = Math.max(60, rawScore);
+
+    let gradeLabel = '🌟 מצוין! שליטה מעולה';
+    let gradeColor = '#10b981';
+    if (finalGrade < 80) {
+      gradeLabel = '💪 טוב מאוד! נדרש עוד חיזוק קל';
+      gradeColor = '#f59e0b';
+    } else if (finalGrade < 92) {
+      gradeLabel = '👏 כל הכבוד! תוצאה נהדרת';
+      gradeColor = '#38bdf8';
+    }
+
     return (
       <div className="flashcard-completion glass-panel animate-fade-in">
         <div className="completion-icon">🏆</div>
@@ -117,20 +147,44 @@ export const FlashcardsView = ({ lesson, onCompleteLesson, onBackToSyllabus, onS
         <p className="completion-sub">
           תרגלת את כל {totalVocab} המילים בשיעור "{lesson.title}". המילים הקשות והבינוניות עברו חזרות מותאמות עד לשליטה!
         </p>
+
+        {/* Grade Badge Card */}
+        <div className="grade-badge-card" style={{ borderColor: gradeColor }}>
+          <div className="grade-score" style={{ color: gradeColor }}>
+            {finalGrade} <span className="grade-max">/ 100</span>
+          </div>
+          <div className="grade-label">{gradeLabel}</div>
+        </div>
         
+        {/* Detailed Breakdown Stats */}
+        <div className="rating-breakdown-grid">
+          <div className="breakdown-stat-box easy">
+            <span className="b-val">🟢 {easyCount}</span>
+            <span className="b-lbl">קלה (שליטה מיידית)</span>
+          </div>
+          <div className="breakdown-stat-box medium">
+            <span className="b-val">🟡 {mediumCount}</span>
+            <span className="b-lbl">בינונית (חזרה בסוף)</span>
+          </div>
+          <div className="breakdown-stat-box hard">
+            <span className="b-val">🔴 {hardCount}</span>
+            <span className="b-lbl">קשה (חזרות מרובות)</span>
+          </div>
+        </div>
+
         <div className="completion-stats">
           <div className="comp-stat-card">
             <span className="comp-stat-val">+{30 + masteredIds.size * 5 + repeatCount * 2}</span>
             <span className="comp-stat-lbl">נקודות XP נצברו</span>
           </div>
           <div className="comp-stat-card">
-            <span className="comp-stat-val">{masteredIds.size} / {totalVocab}</span>
-            <span className="comp-stat-lbl">מילים נשלטו בציון "קל"</span>
+            <span className="comp-stat-val">{easyCount} / {totalVocab}</span>
+            <span className="comp-stat-lbl">מילים בציון "קל"</span>
           </div>
           {repeatCount > 0 && (
             <div className="comp-stat-card highlight">
               <span className="comp-stat-val">🔁 {repeatCount}</span>
-              <span className="comp-stat-lbl">חזרות אדפטיביות שבוצעו</span>
+              <span className="comp-stat-lbl">חזרות אדפטיביות</span>
             </div>
           )}
         </div>

@@ -77,16 +77,48 @@ export const QuizView = ({ lesson, onCompleteQuiz, onBackToSyllabus, onActivity 
 
   if (isFinished) {
     const initialTotal = lesson.quiz.length;
-    const successPercentage = Math.round((firstTryCorrectCount / initialTotal) * 100);
+    const rawScore = Math.round((firstTryCorrectCount / initialTotal) * 100);
+    const finalGrade = Math.max(60, rawScore);
+    const wrongCount = initialTotal - firstTryCorrectCount;
+
+    let gradeLabel = '🌟 מצוין! שליטה מעולה';
+    let gradeColor = '#10b981';
+    if (finalGrade < 75) {
+      gradeLabel = '💪 טוב מאוד! נדרש עוד תרגול';
+      gradeColor = '#f59e0b';
+    } else if (finalGrade < 90) {
+      gradeLabel = '👏 כל הכבוד! תוצאה טובה';
+      gradeColor = '#38bdf8';
+    }
+
     return (
       <div className="quiz-finished-card glass-panel animate-fade-in">
         <div className="finish-badge">🏆</div>
         <h2>סיימת את המבחן בהצלחה!</h2>
         <p className="finish-sub">שיעור: {lesson.title}</p>
 
-        <div className="result-circle">
-          <span className="res-num">{successPercentage}%</span>
-          <span className="res-lbl">{firstTryCorrectCount} מתוך {initialTotal} תשובות נכונות בניסיון ראשון</span>
+        {/* Grade Badge Card */}
+        <div className="grade-badge-card" style={{ borderColor: gradeColor }}>
+          <div className="grade-score" style={{ color: gradeColor }}>
+            {finalGrade} <span className="grade-max">/ 100</span>
+          </div>
+          <div className="grade-label">{gradeLabel}</div>
+        </div>
+
+        {/* Quiz Breakdown Stats */}
+        <div className="rating-breakdown-grid">
+          <div className="breakdown-stat-box easy">
+            <span className="b-val">🟢 {firstTryCorrectCount}</span>
+            <span className="b-lbl">נכון מניסיון ראשון</span>
+          </div>
+          <div className="breakdown-stat-box hard">
+            <span className="b-val">🔴 {wrongCount}</span>
+            <span className="b-lbl">שגוי (תוקן בסוף)</span>
+          </div>
+          <div className="breakdown-stat-box medium">
+            <span className="b-val">🔁 {wrongRepeatsCount}</span>
+            <span className="b-lbl">סך חזרות אדפטיביות</span>
+          </div>
         </div>
 
         {wrongRepeatsCount > 0 && (
