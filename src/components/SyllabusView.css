@@ -1,4 +1,4 @@
-/* Duolingo-Style Interactive Learning Path CSS */
+/* Duolingo-Style Interactive Learning Path CSS with SVG Curves & Perfect Alignment */
 
 .syllabus-container {
   max-width: 680px;
@@ -10,23 +10,23 @@
 .duolingo-path-wrapper {
   display: flex;
   flex-direction: column;
-  gap: 32px;
+  gap: 36px;
 }
 
 /* Unit Banner Header Card */
 .duolingo-unit-section {
   display: flex;
   flex-direction: column;
-  gap: 24px;
+  gap: 20px;
 }
 
 .unit-banner-card {
   padding: 20px;
   border-radius: 24px;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   display: flex;
   flex-direction: column;
   gap: 16px;
@@ -43,17 +43,36 @@
   gap: 16px;
 }
 
+.unit-badge-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+}
+
 .unit-number-tag {
   font-size: 0.72rem;
   font-weight: 800;
   letter-spacing: 0.8px;
   text-transform: uppercase;
   color: #fbbf24;
-  background: rgba(245, 158, 11, 0.2);
+  background: rgba(245, 158, 11, 0.25);
   padding: 3px 10px;
   border-radius: 12px;
-  display: inline-block;
-  margin-bottom: 4px;
+  border: 1px solid rgba(245, 158, 11, 0.4);
+}
+
+.unit-mastered-tag {
+  font-size: 0.72rem;
+  font-weight: 800;
+  color: #34d399;
+  background: rgba(16, 185, 129, 0.2);
+  padding: 3px 10px;
+  border-radius: 12px;
+  border: 1px solid rgba(16, 185, 129, 0.4);
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .unit-banner-title {
@@ -61,6 +80,7 @@
   font-weight: 800;
   color: #ffffff;
   margin: 0;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
 }
 
 .theme-light .unit-banner-title {
@@ -88,10 +108,10 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  background: rgba(0, 0, 0, 0.2);
+  background: rgba(0, 0, 0, 0.25);
   padding: 10px 14px;
   border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .unit-progress-info {
@@ -103,13 +123,13 @@
 }
 
 .unit-pct {
-  color: #10b981;
+  font-weight: 800;
 }
 
 .unit-progress-track {
   width: 100%;
   height: 8px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.12);
   border-radius: 100px;
   overflow: hidden;
 }
@@ -120,63 +140,73 @@
   transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Serpentine Zigzag Path Rows */
-.unit-nodes-path {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 20px;
+/* ------------------------------------------------ */
+/* SERPENTINE CURVE SVG PATH CONTAINER              */
+/* ------------------------------------------------ */
+.unit-path-container {
+  position: relative;
+  width: 320px;
+  margin: 0 auto;
   padding: 10px 0;
-  position: relative;
 }
 
-.node-row {
-  display: flex;
-  width: 100%;
-  position: relative;
-}
-
-.node-row.pos-center {
-  justify-content: center;
-}
-
-.node-row.pos-right {
-  justify-content: flex-end;
-  padding-left: 24%;
-}
-
-.node-row.pos-left {
-  justify-content: flex-start;
-  padding-right: 24%;
-}
-
-/* Connector Line Between Path Nodes */
-.path-connector-line {
+/* SVG Lines Overlay Behind Nodes */
+.unit-path-svg {
   position: absolute;
-  top: -24px;
-  left: 50%;
-  width: 6px;
-  height: 28px;
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 4px;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
   z-index: 1;
+  overflow: visible;
 }
 
-/* Node Button Container */
-.node-button-container {
+.path-bg-line {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.14);
+  stroke-width: 10px;
+  stroke-linecap: round;
+  stroke-dasharray: 6 6;
+}
+
+.path-active-line {
+  fill: none;
+  stroke-width: 7px;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.5));
+}
+
+/* Nodes List Container */
+.unit-nodes-list {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 2;
+}
+
+.node-row-item {
+  height: 125px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  position: relative;
+}
+
+/* Capsule Wrapping Circle Button + Label Together */
+.node-capsule {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
-  z-index: 2;
-  position: relative;
+  gap: 6px;
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 /* Duolingo 3D Circular Node Button */
 .duolingo-node-btn {
   position: relative;
-  width: 78px;
-  height: 78px;
+  width: 76px;
+  height: 76px;
   border-radius: 50%;
   border: none;
   cursor: pointer;
@@ -188,10 +218,10 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-/* Status Completed Node (Golden/Green Check) */
+/* Status Completed Node */
 .duolingo-node-btn.status-completed {
   background: linear-gradient(135deg, #10b981 0%, #059669 100%);
-  box-shadow: 0 8px 0 #047857, 0 10px 20px rgba(16, 185, 129, 0.35);
+  box-shadow: 0 8px 0 #047857, 0 10px 22px rgba(16, 185, 129, 0.4);
   color: #ffffff;
 }
 
@@ -205,16 +235,16 @@
   box-shadow: 0 2px 0 #047857;
 }
 
-/* Status Current Active Node (Pulsing Star) */
+/* Status Current Active Node */
 .duolingo-node-btn.status-current {
   background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
-  box-shadow: 0 8px 0 #b45309, 0 12px 25px rgba(245, 158, 11, 0.45);
+  box-shadow: 0 8px 0 #b45309, 0 12px 25px rgba(245, 158, 11, 0.5);
   color: #ffffff;
 }
 
 .duolingo-node-btn.status-current:hover {
   transform: translateY(2px) scale(1.04);
-  box-shadow: 0 6px 0 #b45309, 0 14px 28px rgba(245, 158, 11, 0.55);
+  box-shadow: 0 6px 0 #b45309, 0 14px 28px rgba(245, 158, 11, 0.6);
 }
 
 .duolingo-node-btn.status-current:active {
@@ -236,10 +266,10 @@
   100% { transform: scale(1.25); opacity: 0; }
 }
 
-/* Status Available / Lock Node */
+/* Status Available Node */
 .duolingo-node-btn.status-available {
   background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
-  box-shadow: 0 8px 0 #1e40af, 0 10px 20px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 0 #1e40af, 0 10px 20px rgba(59, 130, 246, 0.35);
   color: #ffffff;
 }
 
@@ -260,36 +290,40 @@
 }
 
 .lesson-emoji {
-  font-size: 2rem;
+  font-size: 2.1rem;
 }
 
 .check-icon {
   color: #ffffff;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
 }
 
 .star-icon {
   color: #ffffff;
-  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.3));
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.35));
 }
 
-/* Node Label Box Below Button */
+/* Node Label Box directly tied to Node Capsule */
 .node-label-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: rgba(30, 41, 59, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.88);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   padding: 4px 12px;
   border-radius: 14px;
   cursor: pointer;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+  max-width: 140px;
+  text-align: center;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 .theme-light .node-label-box {
-  background: rgba(255, 255, 255, 0.9);
-  border-color: rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.95);
+  border-color: rgba(0, 0, 0, 0.12);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -299,9 +333,10 @@
 }
 
 .node-label-title {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   font-weight: 700;
   color: #f8fafc;
+  line-height: 1.2;
 }
 
 .theme-light .node-label-title {
@@ -311,6 +346,7 @@
 .node-label-words {
   font-size: 0.68rem;
   color: #94a3b8;
+  margin-top: 1px;
 }
 
 /* Duolingo Popover Modal */
@@ -454,4 +490,38 @@
 
 .popover-btn.secondary:hover {
   background: rgba(255, 255, 255, 0.2);
+}
+
+/* Mobile Screen Adjustments */
+@media (max-width: 480px) {
+  .unit-path-container {
+    width: 290px;
+  }
+
+  .unit-banner-card {
+    padding: 16px;
+    border-radius: 20px;
+  }
+
+  .unit-banner-title {
+    font-size: 1.25rem;
+  }
+
+  .duolingo-node-btn {
+    width: 70px;
+    height: 70px;
+  }
+
+  .lesson-emoji {
+    font-size: 1.9rem;
+  }
+
+  .node-label-box {
+    max-width: 125px;
+    padding: 3px 10px;
+  }
+
+  .node-label-title {
+    font-size: 0.76rem;
+  }
 }
