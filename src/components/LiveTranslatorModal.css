@@ -93,11 +93,14 @@
 .translator-input-group {
   position: relative;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .translator-textarea {
   width: 100%;
-  padding: 14px 44px 14px 16px;
+  padding: 14px 110px 14px 16px;
   background: rgba(15, 23, 42, 0.8);
   border: 1px solid rgba(255, 255, 255, 0.25);
   border-radius: 18px;
@@ -121,14 +124,61 @@
   box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
 }
 
-.translator-clear-btn {
+.input-action-buttons {
   position: absolute;
-  left: 12px;
-  top: 14px;
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.5);
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.translator-clear-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  color: rgba(255, 255, 255, 0.6);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.translator-clear-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.translator-submit-btn {
+  padding: 8px 14px;
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  border: none;
+  border-radius: 12px;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.35);
+  transition: all 0.2s ease;
+}
+
+.translator-submit-btn:hover:not(:disabled) {
+  transform: scale(1.04);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.5);
+}
+
+.translator-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 /* Results Card */

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Volume2, Copy, Check, X, Globe, Sparkles, ArrowLeftRight, Loader2 } from 'lucide-react';
+import { Search, Volume2, Copy, Check, X, Globe, Sparkles, ArrowLeftRight, Loader2, Send } from 'lucide-react';
 import { speakTagalog } from '../utils/audioTTS';
 import { translateFreeTextAsync, quickTravelPhrases } from '../utils/translatorEngine';
 import './LiveTranslatorModal.css';
@@ -10,6 +10,25 @@ export function LiveTranslatorModal({ isOpen, onClose }) {
   const [loading, setLoading] = useState(false);
   const [copied, setCopied] = useState(false);
 
+  const executeTranslation = async (textToTranslate) => {
+    const trimmed = (textToTranslate || '').trim();
+    if (!trimmed) {
+      setTranslationResult(null);
+      setLoading(false);
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const res = await translateFreeTextAsync(trimmed);
+      setTranslationResult(res);
+    } catch (e) {
+      console.log('Translation error:', e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     const trimmed = inputText.trim();
     if (!trimmed) {
@@ -18,22 +37,21 @@ export function LiveTranslatorModal({ isOpen, onClose }) {
       return;
     }
 
-    setLoading(true);
-    const timer = setTimeout(async () => {
-      try {
-        const res = await translateFreeTextAsync(trimmed);
-        setTranslationResult(res);
-      } catch (e) {
-        console.log('Translation error:', e);
-      } finally {
-        setLoading(false);
-      }
-    }, 350); // 350ms debounce for smooth typing
+    const timer = setTimeout(() => {
+      executeTranslation(trimmed);
+    }, 400); // 400ms debounce for live typing
 
     return () => clearTimeout(timer);
   }, [inputText]);
 
   if (!isOpen) return null;
+
+  const handleManualSubmit = (e) => {
+    if (e) e.preventDefault();
+    if (inputText.trim()) {
+      executeTranslation(inputText.trim());
+    }
+  };
 
   const handlePlayAudio = (text) => {
     if (text) speakTagalog(text);
@@ -48,6 +66,7 @@ export function LiveTranslatorModal({ isOpen, onClose }) {
 
   const handleSelectQuickPhrase = (phrase) => {
     setInputText(phrase.hebrew);
+    executeTranslation(phrase.hebrew);
   };
 
   return (
@@ -58,57 +77,79 @@ export function LiveTranslatorModal({ isOpen, onClose }) {
           <div className="translator-header-title">
             <div className="translator-globe-icon"><Globe size={22} /></div>
             <div>
-              <h3>מתרגם חופשי בלייב</h3>
-              <span className="translator-sub-title">תרגום Google Translate בזמן אמת עברית ⇄ טגלוג</span>
+              <h3>תרגום חופשי לשרת פיליפינית 🇵🇭</h3>
+              <span className="translator-sub-title">תרגום בזמן אמת (עברית ⇄ Tagalog / פיליפינית)</span>
             </div>
           </div>
-          <button className="translator-close-btn" onClick={onClose}>
+          <button className="translator-close-btn" onClick={onClose} title="סגור">
             <X size={20} />
           </button>
         </div>
 
-        {/* Input Bar */}
-        <div className="translator-input-group">
+        {/* Input Bar with Submit Button */}
+        <form className="translator-input-group" onSubmit={handleManualSubmit}>
           <textarea
             className="translator-textarea"
             placeholder="הקלד כאן כל מילה או משפט חופשי (למשל: איפה יש מסעדה טובה?, כמה זה עולה?, Saan ang beach?)..."
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                handleManualSubmit(e);
+              }
+            }}
             rows={2}
             autoFocus
           />
-          {inputText && (
-            <button className="translator-clear-btn" onClick={() => setInputText('')}>
-              <X size={18} />
+          <div className="input-action-buttons">
+            {inputText && (
+              <button 
+                type="button" 
+                className="translator-clear-btn" 
+                onClick={() => { setInputText(''); setTranslationResult(null); }}
+                title="נקה טקסט"
+              >
+                <X size={18} />
+              </button>
+            )}
+            <button 
+              type="submit" 
+              className="translator-submit-btn"
+              disabled={!inputText.trim() || loading}
+              title="תרגם פיליפינית עכשיו"
+            >
+              <Send size={15} />
+              <span>תרגם</span>
             </button>
-          )}
-        </div>
+          </div>
+        </form>
 
         {/* Translation Results Display */}
         {loading ? (
           <div className="translator-loading-state">
             <Loader2 size={26} className="animate-spin text-emerald-400" />
-            <span>מתרגם בלייב מ-Google Translate... ✨</span>
+            <span>מתרגם לפיליפינית (Tagalog) בזמן אמת... ✨</span>
           </div>
         ) : translationResult ? (
           <div className="translation-result-card animate-fade-in">
             <div className="result-header">
               <span className="result-badge">{translationResult.category}</span>
               <span className="result-lang-indicator">
-                <ArrowLeftRight size={13} /> {translationResult.detectedLang === 'hebrew' ? 'מעברית לטגלוג' : 'מטגלוג לעברית'}
+                <ArrowLeftRight size={13} /> {translationResult.detectedLang === 'hebrew' ? 'מעברית לפיליפינית (Tagalog)' : 'מפיליפינית לעברית'}
               </span>
             </div>
 
-            {/* Tagalog Output Box */}
+            {/* Tagalog / Filipino Output Box */}
             <div className="result-output-box tagalog-box">
-              <div className="output-label">🇵🇭 טגלוג (Tagalog)</div>
+              <div className="output-label">🇵🇭 פיליפינית (Tagalog)</div>
               <div className="output-main-row">
                 <span className="output-text tagalog-text">{translationResult.tagalog}</span>
                 <div className="output-actions">
                   <button 
                     className="action-btn audio-btn"
                     onClick={() => handlePlayAudio(translationResult.tagalog)}
-                    title="השמע הגייה"
+                    title="השמע הגייה פיליפינית"
                   >
                     <Volume2 size={20} />
                   </button>
@@ -149,7 +190,7 @@ export function LiveTranslatorModal({ isOpen, onClose }) {
         ) : (
           <div className="translator-empty-state">
             <Sparkles size={32} className="empty-sparkle-icon" />
-            <p>הקלידו מילה או משפט חופשי כדי לקבל תרגום מיידי מ-Google Translate, תעתיק פונטי והשמעה קולית.</p>
+            <p>הקלידו מילה או משפט חופשי כדי לקבל תרגום מדויק לפיליפינית (Tagalog), תעתיק פונטי בעברית והשמעה קולית.</p>
           </div>
         )}
 
@@ -160,6 +201,7 @@ export function LiveTranslatorModal({ isOpen, onClose }) {
             {quickTravelPhrases.map((phrase, idx) => (
               <button 
                 key={idx}
+                type="button"
                 className="quick-phrase-chip"
                 onClick={() => handleSelectQuickPhrase(phrase)}
               >

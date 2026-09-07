@@ -128,7 +128,7 @@ export function generateTagalogPhonetic(tagalogText) {
 }
 
 /**
- * תרגום אסינכרוני בזמן אמת מול Google Translate API
+ * תרגום אסינכרוני בזמן אמת מול מנועי תרגום פיליפינית (MyMemory API + Google Translate + מילון מקומי)
  */
 export async function translateFreeTextAsync(inputText) {
   initMasterDictionary();
@@ -155,38 +155,72 @@ export async function translateFreeTextAsync(inputText) {
     };
   }
 
-  // 2. שליפת תרגום בלייב מ-Google Translate API
+  // 2. תרגום פיליפינית מול MyMemory Translation API (אמין, מהיר ואינו נחסם)
+  try {
+    const langpair = isHeb ? 'he|tl' : 'tl|he';
+    const myMemoryUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(trimmed)}&langpair=${langpair}`;
+    const res = await fetch(myMemoryUrl);
+    if (res.ok) {
+      const data = await res.json();
+      if (data && data.responseData && data.responseData.translatedText) {
+        const translatedText = data.responseData.translatedText.trim();
+        // בדיקה שהתרגום החזיר תוצאה תקינה השונה מהמקור
+        if (translatedText && translatedText.toLowerCase() !== trimmed.toLowerCase()) {
+          const tagalogOutput = isHeb ? translatedText : trimmed;
+          const hebrewOutput = isHeb ? trimmed : translatedText;
+          const phonetic = generateTagalogPhonetic(tagalogOutput);
+
+          return {
+            originalText: trimmed,
+            tagalog: tagalogOutput,
+            hebrew: hebrewOutput,
+            phoneticHebrew: phonetic,
+            category: 'תרגום פיליפינית בזמן אמת 🇵🇭',
+            exampleSentence: null,
+            isExactMatch: false,
+            detectedLang: isHeb ? 'hebrew' : 'tagalog'
+          };
+        }
+      }
+    }
+  } catch (err) {
+    console.log('MyMemory translate error, trying fallback...', err);
+  }
+
+  // 3. תרגום גיבוי מ-Google Translate GTX API
   try {
     const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${sourceLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(trimmed)}`;
     const response = await fetch(url);
-    if (!response.ok) throw new Error('API Error');
-    const data = await response.json();
-    
-    let translatedText = '';
-    if (data && data[0]) {
-      translatedText = data[0].map(segment => segment[0]).join('');
+    if (response.ok) {
+      const data = await response.json();
+      let translatedText = '';
+      if (data && data[0]) {
+        translatedText = data[0].map(segment => segment[0]).join('');
+      }
+
+      if (translatedText) {
+        const tagalogOutput = isHeb ? translatedText : trimmed;
+        const hebrewOutput = isHeb ? trimmed : translatedText;
+        const phonetic = generateTagalogPhonetic(tagalogOutput);
+
+        return {
+          originalText: trimmed,
+          tagalog: tagalogOutput,
+          hebrew: hebrewOutput,
+          phoneticHebrew: phonetic,
+          category: 'Google Translate ✨',
+          exampleSentence: null,
+          isExactMatch: false,
+          detectedLang: isHeb ? 'hebrew' : 'tagalog'
+        };
+      }
     }
-
-    if (!translatedText) throw new Error('Empty response');
-
-    const tagalogOutput = isHeb ? translatedText : trimmed;
-    const hebrewOutput = isHeb ? trimmed : translatedText;
-    const phonetic = generateTagalogPhonetic(tagalogOutput);
-
-    return {
-      originalText: trimmed,
-      tagalog: tagalogOutput,
-      hebrew: hebrewOutput,
-      phoneticHebrew: phonetic,
-      category: 'Google Translate ✨',
-      exampleSentence: null,
-      isExactMatch: false,
-      detectedLang: isHeb ? 'hebrew' : 'tagalog'
-    };
   } catch (err) {
-    // מנוע נפילה מקומי (Fallback) במידה והחיבור בלתי זמין
-    return translateFreeTextFallback(trimmed, isHeb);
+    console.log('Google Translate error:', err);
   }
+
+  // 4. מנוע נפילה מקומי (Word-by-word fallback)
+  return translateFreeTextFallback(trimmed, isHeb);
 }
 
 function translateFreeTextFallback(trimmed, isHeb) {
