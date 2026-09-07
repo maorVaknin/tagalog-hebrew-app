@@ -13,6 +13,8 @@ import { BottomNav } from './components/BottomNav';
 import MobileSimulator from './components/MobileSimulator';
 import UserProfileModal from './components/UserProfileModal';
 import WelcomeSplash from './components/WelcomeSplash';
+import AuthModal from './components/AuthModal';
+import { getActiveUser, saveUserDataToCloud } from './utils/firebase';
 
 export function App() {
   const [currentTab, setCurrentTab] = useState('syllabus');
@@ -22,11 +24,15 @@ export function App() {
   const [isSimulated, setIsSimulated] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
 
+  // Cloud Auth & DB User State
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [activeCloudUser, setActiveCloudUser] = useState(() => getActiveUser());
+
   // User Profile State & Modal
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [userProfile, setUserProfile] = useState(() => {
     const saved = localStorage.getItem('th_user_profile');
-    return saved ? JSON.parse(saved) : { name: 'לומד טגלוג', email: '', avatar: '🌴', isLoggedIn: false };
+    return saved ? JSON.parse(saved) : { name: 'לומד טגלוג', email: '', avatar: '🐋', isLoggedIn: false };
   });
 
   // Floating Toast Notification for +10 XP & Streaks
@@ -50,9 +56,18 @@ export function App() {
     return saved ? JSON.parse(saved) : ['u1_l1'];
   });
 
+  // סנכרון ה-XP והסטטיסטיקות לענן במידה ומשתמש מחובר
   useEffect(() => {
     localStorage.setItem('th_user_stats', JSON.stringify(userStats));
-  }, [userStats]);
+    if (activeCloudUser?.uid) {
+      saveUserDataToCloud(activeCloudUser.uid, {
+        xp: userStats.xp,
+        streak: userStats.streak,
+        lastActiveDate: userStats.lastActiveDate,
+        displayName: userProfile.name
+      });
+    }
+  }, [userStats, activeCloudUser]);
 
   useEffect(() => {
     localStorage.setItem('th_completed_lessons', JSON.stringify(completedLessons));
@@ -70,6 +85,23 @@ export function App() {
       });
     }
   }, []);
+
+  const handleCloudUserChange = (user) => {
+    setActiveCloudUser(user);
+    if (user) {
+      setUserProfile(prev => ({
+        ...prev,
+        name: user.displayName || user.email.split('@')[0],
+        email: user.email,
+        isLoggedIn: true
+      }));
+      if (user.xp) {
+        setUserStats(prev => ({ ...prev, xp: user.xp, streak: user.streak || prev.streak }));
+      }
+    } else {
+      setUserProfile(prev => ({ ...prev, isLoggedIn: false }));
+    }
+  };
 
   /**
    * Central Activity Recorder:
@@ -169,6 +201,8 @@ export function App() {
         onToggleSimulator={handleToggleSimulator}
         userProfile={userProfile}
         onOpenProfile={() => setIsProfileModalOpen(true)}
+        activeCloudUser={activeCloudUser}
+        onOpenAuth={() => setIsAuthModalOpen(true)}
       />
 
       <main className="app-content-area">
@@ -236,6 +270,14 @@ export function App() {
         completedLessonsCount={completedLessons.length}
         userProfile={userProfile}
         setUserProfile={setUserProfile}
+      />
+
+      {/* Cloud Auth & DB Sync Modal */}
+      <AuthModal 
+        isOpen={isAuthModalOpen}
+        onClose={() => setIsAuthModalOpen(false)}
+        activeUser={activeCloudUser}
+        onUserChange={handleCloudUserChange}
       />
     </div>
   );

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Moon, Sun, Smartphone, Monitor, User } from 'lucide-react';
+import { Moon, Sun, Smartphone, Monitor, Cloud } from 'lucide-react';
 import appLogo from '../assets/app-logo.png';
 import './Navbar.css';
 
@@ -12,9 +12,11 @@ export const Navbar = ({
   isSimulated,
   onToggleSimulator,
   userProfile,
-  onOpenProfile
+  onOpenProfile,
+  activeCloudUser,
+  onOpenAuth
 }) => {
-  const avatar = userProfile?.avatar || '🌴';
+  const avatar = userProfile?.avatar || '🐋';
   const userName = userProfile?.name || 'אורח';
 
   return (
@@ -38,6 +40,16 @@ export const Navbar = ({
 
       {/* Clean Right Actions with User Profile Button */}
       <div className="navbar-actions">
+        {/* Cloud DB & Auth Sync Button */}
+        <button 
+          className={`cloud-sync-nav-btn ${activeCloudUser ? 'active' : ''}`}
+          onClick={onOpenAuth}
+          title={activeCloudUser ? `מחובר בענן כ-${activeCloudUser.displayName}` : "התחבר לשמירת דאטה ב-DB בענן"}
+        >
+          <Cloud size={16} />
+          <span>{activeCloudUser ? 'מסונכרן DB' : 'התחבר ל-DB'}</span>
+        </button>
+
         {/* User Profile Button */}
         <button 
           className="user-profile-nav-btn"
@@ -73,3 +85,5 @@ export const Navbar = ({
     </header>
   );
 };
+
+export default Navbar;
