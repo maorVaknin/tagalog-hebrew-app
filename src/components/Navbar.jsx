@@ -28,7 +28,7 @@ export const Navbar = ({
         </div>
         <div className="brand-titles">
           <div className="brand-title-row">
-            <h1 className="brand-name">
+            <h1 className="brand-name" dir="ltr">
               Taga<span className="brand-highlight">lingo</span>
             </h1>
           </div>

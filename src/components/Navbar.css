@@ -109,6 +109,9 @@
   color: #ffffff;
   margin: 0;
   line-height: 1.2;
+  direction: ltr;
+  display: inline-flex;
+  align-items: center;
 }
 
 .theme-light .brand-name {

@@ -64,7 +64,7 @@ export function WelcomeSplash({ activeCloudUser, onEnterApp, onRegister, onLogin
             <span className="splash-ring"></span>
           </div>
           <div className="splash-brand-titles">
-            <h1 className="splash-main-title">
+            <h1 className="splash-main-title" dir="ltr">
               Taga<span className="splash-highlight">lingo</span>
             </h1>
             <span className="splash-sub-title">האפליקציה האינטראקטיבית ללימוד טגלוג בעברית</span>

@@ -143,10 +143,11 @@
   font-size: 1.9rem;
   font-weight: 800;
   margin: 0;
-  display: flex;
+  display: inline-flex;
   align-items: center;
-  gap: 6px;
+  gap: 0;
   color: #ffffff;
+  direction: ltr;
   text-shadow: 0 3px 12px rgba(0, 0, 0, 0.9);
 }
 
