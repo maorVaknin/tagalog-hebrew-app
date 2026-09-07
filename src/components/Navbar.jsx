@@ -1,5 +1,5 @@
 import React from 'react';
-import { Moon, Sun, Smartphone, Monitor } from 'lucide-react';
+import { Moon, Sun, Smartphone, Monitor, Globe } from 'lucide-react';
 import appLogo from '../assets/app-logo.png';
 import './Navbar.css';
 
@@ -13,7 +13,8 @@ export const Navbar = ({
   onToggleSimulator,
   userProfile,
   onOpenProfile,
-  activeCloudUser
+  activeCloudUser,
+  onOpenTranslator
 }) => {
   const avatar = activeCloudUser?.avatar || userProfile?.avatar || '🐋';
   const userName = activeCloudUser?.displayName || activeCloudUser?.username || userProfile?.name || 'אורח';
@@ -36,8 +37,18 @@ export const Navbar = ({
         </div>
       </div>
 
-      {/* Clean Right Actions with Prominent User Greeting */}
+      {/* Clean Right Actions with Prominent User Greeting & Translator Button */}
       <div className="navbar-actions">
+        {/* Live Free Text Translator Button */}
+        <button 
+          className="live-translator-nav-btn"
+          onClick={onOpenTranslator}
+          title="מתרגם חופשי בלייב (עברית ⇄ טגלוג)"
+        >
+          <Globe size={16} />
+          <span>תרגום חופשי</span>
+        </button>
+
         {/* User Profile & Greeting Button */}
         <button 
           className="user-profile-nav-btn"

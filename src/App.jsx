@@ -14,6 +14,7 @@ import MobileSimulator from './components/MobileSimulator';
 import UserProfileModal from './components/UserProfileModal';
 import WelcomeSplash from './components/WelcomeSplash';
 import AuthModal from './components/AuthModal';
+import LiveTranslatorModal from './components/LiveTranslatorModal';
 import { getActiveUser, saveUserDataToCloud, registerUser, loginUser, logoutUser } from './utils/firebase';
 
 export function App() {
@@ -23,6 +24,9 @@ export function App() {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [isSimulated, setIsSimulated] = useState(false);
   const [showSplash, setShowSplash] = useState(true);
+
+  // Live Translator Modal State
+  const [isTranslatorOpen, setIsTranslatorOpen] = useState(false);
 
   // Cloud Auth & DB User State
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
@@ -224,6 +228,7 @@ export function App() {
         userProfile={userProfile}
         onOpenProfile={() => setIsProfileModalOpen(true)}
         activeCloudUser={activeCloudUser}
+        onOpenTranslator={() => setIsTranslatorOpen(true)}
       />
 
       <main className="app-content-area">
@@ -282,6 +287,12 @@ export function App() {
 
       <BottomNav currentTab={currentTab} setCurrentTab={setCurrentTab} />
       <IOSInstallPrompt />
+
+      {/* Live Free Text Translator Modal */}
+      <LiveTranslatorModal 
+        isOpen={isTranslatorOpen}
+        onClose={() => setIsTranslatorOpen(false)}
+      />
 
       {/* User Profile Modal */}
       <UserProfileModal 
