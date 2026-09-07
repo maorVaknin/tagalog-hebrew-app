@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { Play, Sparkles, ShieldCheck, UserPlus, LogIn, User, Mail, Lock, ArrowRight, LogOut, Award, Flame } from 'lucide-react';
+import { Play, Sparkles, ShieldCheck, UserPlus, LogIn, User, Lock, LogOut, Award, Flame } from 'lucide-react';
 import appLogo from '../assets/app-logo.png';
 import './WelcomeSplash.css';
 
 export function WelcomeSplash({ activeCloudUser, onEnterApp, onRegister, onLogin, onGuestContinue, onLogout }) {
   const [authMode, setAuthMode] = useState('register'); // 'register' | 'login'
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [loading, setLoading] = useState(false);
@@ -14,35 +13,31 @@ export function WelcomeSplash({ activeCloudUser, onEnterApp, onRegister, onLogin
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrorMessage('');
+
+    const cleanUsername = username.trim();
+    if (!cleanUsername || !password.trim()) {
+      setErrorMessage('אנא הזן שם משתמש וסיסמה');
+      return;
+    }
+    if (password.length < 3) {
+      setErrorMessage('הסיסמה חייבת להכיל לפחות 3 תווים');
+      return;
+    }
+
     setLoading(true);
 
     try {
       if (authMode === 'register') {
-        if (!email.trim() || !password.trim() || !name.trim()) {
-          setErrorMessage('אנא מלא את כל השדות (שם, אימייל וסיסמה)');
-          setLoading(false);
-          return;
-        }
-        if (password.length < 4) {
-          setErrorMessage('הסיסמה חייבת להכיל לפחות 4 תווים');
-          setLoading(false);
-          return;
-        }
-        const res = await onRegister(email.trim(), password.trim(), name.trim());
+        const res = await onRegister(cleanUsername, password.trim());
         if (!res.success) {
           setErrorMessage(res.error || 'שגיאה ביצירת החשבון');
         } else {
           onEnterApp();
         }
       } else {
-        if (!email.trim() || !password.trim()) {
-          setErrorMessage('אנא הזן אימייל וסיסמה');
-          setLoading(false);
-          return;
-        }
-        const res = await onLogin(email.trim(), password.trim());
+        const res = await onLogin(cleanUsername, password.trim());
         if (!res.success) {
-          setErrorMessage(res.error || 'אימייל או סיסמה שגויים');
+          setErrorMessage(res.error || 'שם משתמש או סיסמה שגויים');
         } else {
           onEnterApp();
         }
@@ -97,7 +92,7 @@ export function WelcomeSplash({ activeCloudUser, onEnterApp, onRegister, onLogin
             <div className="welcome-user-avatar">{activeCloudUser.avatar || '🐋'}</div>
             <div className="welcome-user-info">
               <span className="welcome-user-greeting">ברוך השב,</span>
-              <h2 className="welcome-user-name">{activeCloudUser.displayName || 'לומד טגלוג'}</h2>
+              <h2 className="welcome-user-name">{activeCloudUser.displayName || activeCloudUser.username || 'לומד טגלוג'}</h2>
               <div className="welcome-user-stats">
                 <span className="user-stat-chip xp-chip"><Award size={14} /> {activeCloudUser.xp || 100} XP</span>
                 <span className="user-stat-chip streak-chip"><Flame size={14} /> {activeCloudUser.streak || 1} ימי רצף</span>
@@ -141,26 +136,13 @@ export function WelcomeSplash({ activeCloudUser, onEnterApp, onRegister, onLogin
             </div>
 
             <form className="splash-auth-form" onSubmit={handleSubmit}>
-              {authMode === 'register' && (
-                <div className="splash-input-group">
-                  <User size={18} className="input-icon" />
-                  <input 
-                    type="text" 
-                    placeholder="שם מלא / כינוי" 
-                    value={name} 
-                    onChange={e => setName(e.target.value)}
-                    required
-                  />
-                </div>
-              )}
-
               <div className="splash-input-group">
-                <Mail size={18} className="input-icon" />
+                <User size={18} className="input-icon" />
                 <input 
-                  type="email" 
-                  placeholder="כתובת אימייל" 
-                  value={email} 
-                  onChange={e => setEmail(e.target.value)}
+                  type="text" 
+                  placeholder="שם משתמש / כינוי (למשל: maor)" 
+                  value={username} 
+                  onChange={e => setUsername(e.target.value)}
                   required
                 />
               </div>
@@ -206,7 +188,7 @@ export function WelcomeSplash({ activeCloudUser, onEnterApp, onRegister, onLogin
         )}
 
         <span className="splash-footer-note">
-          <ShieldCheck size={14} /> הנתונים שלך נשמרים בענן ובמכשיר בצורה מאובטחת
+          <ShieldCheck size={14} /> הנתונים שלך נשמרים מאובטחים ללא צורך באימייל
         </span>
       </div>
     </div>

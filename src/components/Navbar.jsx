@@ -1,5 +1,5 @@
 import React from 'react';
-import { Moon, Sun, Smartphone, Monitor, Cloud } from 'lucide-react';
+import { Moon, Sun, Smartphone, Monitor } from 'lucide-react';
 import appLogo from '../assets/app-logo.png';
 import './Navbar.css';
 
@@ -13,11 +13,10 @@ export const Navbar = ({
   onToggleSimulator,
   userProfile,
   onOpenProfile,
-  activeCloudUser,
-  onOpenAuth
+  activeCloudUser
 }) => {
-  const avatar = userProfile?.avatar || '🐋';
-  const userName = userProfile?.name || 'אורח';
+  const avatar = activeCloudUser?.avatar || userProfile?.avatar || '🐋';
+  const userName = activeCloudUser?.displayName || activeCloudUser?.username || userProfile?.name || 'אורח';
 
   return (
     <header className="navbar-container glass-panel luxury-header">
@@ -38,19 +37,9 @@ export const Navbar = ({
         </div>
       </div>
 
-      {/* Clean Right Actions with User Profile Button */}
+      {/* Clean Right Actions with Prominent User Greeting */}
       <div className="navbar-actions">
-        {/* Cloud DB & Auth Sync Button */}
-        <button 
-          className={`cloud-sync-nav-btn ${activeCloudUser ? 'active' : ''}`}
-          onClick={onOpenAuth}
-          title={activeCloudUser ? `מחובר בענן כ-${activeCloudUser.displayName}` : "התחבר לשמירת דאטה ב-DB בענן"}
-        >
-          <Cloud size={16} />
-          <span>{activeCloudUser ? 'מסונכרן DB' : 'התחבר ל-DB'}</span>
-        </button>
-
-        {/* User Profile Button */}
+        {/* User Profile & Greeting Button */}
         <button 
           className="user-profile-nav-btn"
           onClick={onOpenProfile}
@@ -58,8 +47,8 @@ export const Navbar = ({
         >
           <span className="user-nav-avatar">{avatar}</span>
           <div className="user-nav-info">
-            <span className="user-nav-name">{userName}</span>
-            <span className="user-nav-xp">{userStats.xp} XP</span>
+            <span className="user-nav-greeting">שלום, <strong className="user-nav-name">{userName}</strong>!</span>
+            <span className="user-nav-xp">⭐ {userStats.xp} XP</span>
           </div>
         </button>
 

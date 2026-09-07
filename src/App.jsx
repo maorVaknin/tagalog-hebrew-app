@@ -189,15 +189,15 @@ export function App() {
         <WelcomeSplash 
           activeCloudUser={activeCloudUser}
           onEnterApp={() => setShowSplash(false)}
-          onRegister={async (email, password, name) => {
-            const res = await registerUser(email, password, name);
+          onRegister={async (username, password) => {
+            const res = await registerUser(username, password);
             if (res.success) {
               handleCloudUserChange(res.user);
             }
             return res;
           }}
-          onLogin={async (email, password) => {
-            const res = await loginUser(email, password);
+          onLogin={async (username, password) => {
+            const res = await loginUser(username, password);
             if (res.success) {
               handleCloudUserChange(res.user);
             }
@@ -224,7 +224,6 @@ export function App() {
         userProfile={userProfile}
         onOpenProfile={() => setIsProfileModalOpen(true)}
         activeCloudUser={activeCloudUser}
-        onOpenAuth={() => setIsAuthModalOpen(true)}
       />
 
       <main className="app-content-area">
