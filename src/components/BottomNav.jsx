@@ -7,8 +7,7 @@ export const BottomNav = ({ currentTab, setCurrentTab }) => {
     { id: 'syllabus', label: 'סילבוס', icon: BookOpen },
     { id: 'dictionary', label: 'מילון', icon: Search },
     { id: 'numbers', label: 'מספרים', icon: Hash },
-    { id: 'roleplay', label: 'שיחה', icon: MessageSquare },
-    { id: 'grammar', label: 'דקדוק', icon: Compass }
+    { id: 'roleplay', label: 'שיחה', icon: MessageSquare }
   ];
 
   return (

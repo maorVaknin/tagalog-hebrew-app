@@ -5,7 +5,6 @@ import { SyllabusView } from './components/SyllabusView';
 import { FlashcardsView } from './components/FlashcardsView';
 import { QuizView } from './components/QuizView';
 import { RolePlaySimulator } from './components/RolePlaySimulator';
-import { GrammarGuideView } from './components/GrammarGuideView';
 import { NumbersView } from './components/NumbersView';
 import { DictionaryView } from './components/DictionaryView';
 import { IOSInstallPrompt } from './components/IOSInstallPrompt';
@@ -296,10 +295,6 @@ export function App() {
             scenarios={courseData.scenarios}
             onAddXp={() => handleRecordActivity(10)}
           />
-        )}
-
-        {currentTab === 'grammar' && (
-          <GrammarGuideView />
         )}
       </main>
 

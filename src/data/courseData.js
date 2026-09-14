@@ -668,176 +668,128 @@ export const courseData = {
     }
   ],
 
-  // תרחישי שיחה לסימולטור (Role-Play Chat Simulator for Travelers)
+  // תרחישי שיחה קצרים וידידותיים למתחילים (Beginner Friendly Role-Play Conversations)
   scenarios: [
     {
       id: "sc_01",
-      titleHebrew: "הזמנת אוכל בשוק המקומי (Divisoria Market)",
-      icon: "🍢",
-      locationTagalog: "Divisoria Market, Manila",
-      descriptionHebrew: "תרגלו הזמנת שיפודי עוף ואורז ממוכרת חביבה בשוק",
-      initialMessageTagalog: "Magandang araw po! Ano po ang gusto ninyong kainin?",
-      initialMessageHebrew: "יום טוב! מה תרצה לאכול?",
-      initialMessagePhonetic: "מַגַאנְדַאנְג אָרָאוָו פּוֹ! אָנוֹ פּוֹ אָנְג גוּסְטוֹ נִין-יוֹנְג כָּאאִין?",
+      titleHebrew: "ברכת בוקר טוב והיכרות",
+      icon: "🌅",
+      locationTagalog: "ברכות פתיחה ליומיום",
+      descriptionHebrew: "שיחת היכרות קצרה ופשוטה של בוקר טוב ושאילת לשלום האחר",
+      initialMessageTagalog: "Magandang umaga po! Kumusta po kayo?",
+      initialMessageHebrew: "בוקר טוב אדוני/גברתי! מה שלומך?",
+      initialMessagePhonetic: "מַגַאנְדַאנְג אוּמָאגָה פּוֹ! קוּמוּסְטָה פּוֹ כָּאיָוֹ?",
       userOptions: [
         {
-          textTagalog: "Magkano po ang adobo at kanin?",
-          textHebrew: "כמה עולה אדובו ואורז?",
-          textPhonetic: "מַגְקָאנוֹ פּוֹ אָנְג אָדוֹבּוֹ אָאת כָּאנִין?",
-          botResponseTagalog: "50 pesos lang po! Masarap at mainit pa.",
-          botResponseHebrew: "50 פסו בלבד! זה טעים וחם מאוד.",
-          botResponsePhonetic: "50 פֶּסוֹס לָאנְג פּוֹ! מַסָארָאפְּ אָאת מָאאִינִית פָּא.",
-          xpReward: 20
+          textTagalog: "Magandang umaga po! Mabuti naman ako, salamat.",
+          textHebrew: "בוקר טוב! אני בסדר גמור, תודה.",
+          textPhonetic: "מַגַאנְדַאנְג אוּמָאגָה פּוֹ! מָאבּוּתִי נָאמָאן אָקוֹ, סָלָמָאט.",
+          botResponseTagalog: "Mabuti naman! Welcome po sa Pilipinas!",
+          botResponseHebrew: "מצוין! ברוך הבא לפיליפינים!",
+          botResponsePhonetic: "מָאבּוּתִי נָאמָאן! װֶלְכָּאם פּוֹ סָא פִּילִיפִּינָאס!",
+          xpReward: 25
         },
         {
-          textTagalog: "Pahingi po ng tubig at isang kanin.",
-          textHebrew: "אפשר מים ומנה אורז אחת בבקשה.",
-          textPhonetic: "פָּאהִין-גִי פּוֹ נְג טוּבִֿיג אָאת אִיסָאנְג כָּאנִין.",
-          botResponseTagalog: "Eto na po ang tubig at kanin ninyo! Tuloy po kayo.",
-          botResponseHebrew: "הנה המים והאורז שלך! בתיאבון.",
-          botResponsePhonetic: "אֶתוֹ נָא פּוֹ אָנְג טוּבִֿיג אָאת כָּאנִין נִין-יוֹ!",
-          xpReward: 20
+          textTagalog: "Magandang umaga po! Ako si Dan, ikaw?",
+          textHebrew: "בוקר טוב! אני דן, ומה שמך?",
+          textPhonetic: "מַגַאנְדַאנְג אוּמָאגָה פּוֹ! אָקוֹ סִי דָאן, אִיכָּאוּ?",
+          botResponseTagalog: "Kinagagalak kong makilala ka, Dan!",
+          botResponseHebrew: "נעים להכיר אותך מאוד, דן!",
+          botResponsePhonetic: "כִּינָאגָאגָאלָאכּ כּוֹנְג מָאכִּילָאלָא כָּה, דָאן!",
+          xpReward: 30
         }
       ]
     },
     {
       id: "sc_02",
-      titleHebrew: "מיקוח ונסיעה בטרייסיקל (El Nido, Palawan)",
-      icon: "🛺",
-      locationTagalog: "El Nido Town, Palawan",
-      descriptionHebrew: "דברו עם נהג הטריקסי לגבי נסיעה לחוף Nacpan Beach",
-      initialMessageTagalog: "Tricycle boss! Saan po ang punta ninyo?",
-      initialMessageHebrew: "טרייסיקל, בוס! לאן תרצה לנסוע?",
-      initialMessagePhonetic: "תְּרָאי-סִיכֶּל בּוֹס! סָאַאן פּוֹ אָנְג פּוּנְתָּה נִין-יוֹ?",
+      titleHebrew: "אמירת תודה וברכת להתראות",
+      icon: "🙏",
+      locationTagalog: "שיח נימוסין קצר",
+      descriptionHebrew: "הבעת תודה פשוטה על עזרה וברכת נסיעה טובה",
+      initialMessageTagalog: "Maraming salamat po sa tulong ninyo!",
+      initialMessageHebrew: "תודה רבה מאוד על העזרה שלך!",
+      initialMessagePhonetic: "מָארָאמִינְג סָלָמָאט פּוֹ סָא תוּלוֹנְג נִין-יוֹ!",
       userOptions: [
         {
-          textTagalog: "Papunta po sa Nacpan Beach. Magkano?",
-          textHebrew: "נוסעים לחוף נאקפאן. כמה זה עולה?",
-          textPhonetic: "פָּאפּוּנְתָּה פּוֹ סָא נָאכְפָּאן בִּיץ'. מַגְקָאנוֹ?",
-          botResponseTagalog: "300 pesos po papunta doon, sir!",
-          botResponseHebrew: "300 פסו לנסיעה לשם, אדוני!",
-          botResponsePhonetic: "300 פֶּסוֹס פּוֹ פָּאפּוּנְתָּה דוֹ-אוֹן, סֶר!",
+          textTagalog: "Walang anuman po! Ingat ka po.",
+          textHebrew: "אין על מה! תשמור על עצמך.",
+          textPhonetic: "וָואלָאנְג אָנוּמָאן פּוֹ! אִין-גָאת כָּה פּוֹ.",
+          botResponseTagalog: "Salamat po! Paalam at ingat!",
+          botResponseHebrew: "תודה לך! להתראות ונסיעה בטוחה!",
+          botResponsePhonetic: "סָלָמָאט פּוֹ! פָּאָאָלָאם אָאת אִין-גָאת!",
           xpReward: 25
-        },
-        {
-          textTagalog: "Ang mahal naman! Pwede po 200 pesos lang?",
-          textHebrew: "זה יקר מאוד! אפשר ב-200 פסו בבקשה?",
-          textPhonetic: "אָנְג מָאהָאל נָאמָאן! פְּװֶדֶה פּוֹ 200 פֶּסוֹס לָאנְג?",
-          botResponseTagalog: "Sige na nga, 250 pesos na lang para sa inyo! Sakay na po.",
-          botResponseHebrew: "נו טוב, 250 פסו בשבילך! עמוד לעלות.",
-          botResponsePhonetic: "סִיגֶה נָא נְגָא, 250 פֶּסוֹס נָא לָאנְג פָּארָא סָא אִין-יוֹ! סָאכָּאי נָא פּוֹ.",
-          xpReward: 35
         }
       ]
     },
     {
       id: "sc_03",
-      titleHebrew: "צ'ק-אין במלון / ריזורט (Panglao, Bohol)",
-      icon: "🏨",
-      locationTagalog: "Alona Beach, Bohol",
-      descriptionHebrew: "בצעו צ'ק-אין בריזורט על הים ובקשו חדר עם נוף למים",
-      initialMessageTagalog: "Magandang hapon po! Welcome sa resort! May reservation po ba kayo?",
-      initialMessageHebrew: "אחר צהריים טובים! ברוכים הבאים לריזורט! יש לכם הזמנה?",
-      initialMessagePhonetic: "מַגַאנְדַאנְג הָאפּוֹן פּוֹ! װֶלְכָּאם סָא רִיזוֹרְט! מַאי רֶזֶרְװֵישְׁן פּוֹ בָּא כָּאיָוֹ?",
+      titleHebrew: "הזמנת שתייה בבית קפה",
+      icon: "☕",
+      locationTagalog: "בית קפה / מסעדה",
+      descriptionHebrew: "בקשת מים או קפה בצורה נימוסית וקצרה",
+      initialMessageTagalog: "Magandang araw po! Ano po ang gusto ninyo?",
+      initialMessageHebrew: "יום טוב! מה תרצה להזמין?",
+      initialMessagePhonetic: "מַגַאנְדַאנְג אָרָאוָו פּוֹ! אָנוֹ פּוֹ אָנְג גוּסְתוֹ נִין-יוֹ?",
       userOptions: [
         {
-          textTagalog: "Opo, may reservation po ako under Dan.",
-          textHebrew: "כן, יש לי הזמנה על שם דן.",
-          textPhonetic: "אוֹפּוֹ, מַאי רֶזֶרְװֵישְׁן פּוֹ אָקוֹ אָנְדֶר דָאן.",
-          botResponseTagalog: "Nakita ko na po! Eto na po ang keycard ng room ninyo.",
-          botResponseHebrew: "מצאתי את ההזמנה! הנה מפתח החדר שלכם.",
-          botResponsePhonetic: "נָאכִּיתָא כּוֹ נָא פּוֹ! אֶתוֹ נָא פּוֹ אָנְג כִּיכָּארְד נְג רוּם נִין-יוֹ.",
-          xpReward: 30
+          textTagalog: "Pahingi po ng tubig, pakiusap.",
+          textHebrew: "אפשר לקבל מים, בבקשה?",
+          textPhonetic: "פָּאהִין-גִי פּוֹ נְג תוּבִֿיג, פָּאכִּיוּסָאפּ.",
+          botResponseTagalog: "Eto na po ang malamig na tubig ninyo, salamat!",
+          botResponseHebrew: "הנה המים הקרים שלך, תודה!",
+          botResponsePhonetic: "אֶתוֹ נָא פּוֹ אָנְג מָאלָאמִיג נָא תוּבִֿיג נִין-יוֹ, סָלָמָאט!",
+          xpReward: 25
         },
         {
-          textTagalog: "Pwede po ba makakuha ng room na may sea view?",
-          textHebrew: "האם אפשר לקבל חדר עם נוף לים?",
-          textPhonetic: "פְּװֶדֶה פּוֹ בָּא מָאכָּאכּוּהָא נְג רוּם נָא מַאי סִי װְיוּ?",
-          botResponseTagalog: "Oo naman po! In-upgrade ko na kayo sa ocean view room!",
-          botResponseHebrew: "בוודאי! שדרגתי אתכם לחדר עם נוף לאוקיינוס!",
-          botResponsePhonetic: "אוֹ-אוֹ נָאמָאן פּוֹ! אִין-אפגרייד כּוֹ נָא כָּאיָוֹ סָא אוֹשֶׁן װְיוּ רוּם!",
-          xpReward: 40
+          textTagalog: "Isang kape po, pakiusap.",
+          textHebrew: "קפה אחד, בבקשה.",
+          textPhonetic: "אִיסָאנְג כָּאפֶּה פּוֹ, פָּאכִּיוּסָאפּ.",
+          botResponseTagalog: "Eto na po ang mainit na kape ninyo!",
+          botResponseHebrew: "הנה הקפה החם שלך!",
+          botResponsePhonetic: "אֶתוֹ נָא פּוֹ אָנְג מָאאִינִית נָא כָּאפֶּה נִין-יוֹ!",
+          xpReward: 30
         }
       ]
     },
     {
       id: "sc_04",
-      titleHebrew: "השכרת אופנוע / קטנוע (Siargao Island)",
-      icon: "🛵",
-      locationTagalog: "General Luna, Siargao",
-      descriptionHebrew: "השכירו קטנוע לנסיעות לגלישה ולטיולים באי",
-      initialMessageTagalog: "Mabuhay! Gusto ninyo mag-rent ng motorbike para sa surfing?",
-      initialMessageHebrew: "ברוכים הבאים! רוצים להשכיר אופנוע לנסיעה לגלישה?",
-      initialMessagePhonetic: "מָאבּוּהָאי! גוּסְטוֹ נִין-יוֹ מַג-רֶנְט נְג מוֹטוֹר-בַּאיְכּ פָּארָא סָא סֶרְפִינְג?",
+      titleHebrew: "שאילת מחיר בחנות",
+      icon: "🛍️",
+      locationTagalog: "חנות / שוק",
+      descriptionHebrew: "שאילת מחיר קצרה ופשוטה של מוצר בחנות",
+      initialMessageTagalog: "Magandang hapon po! May maipaglilingkod po ba ako?",
+      initialMessageHebrew: "אחר צהריים טובים! איך אפשר לעזור?",
+      initialMessagePhonetic: "מַגַאנְדַאנְג הָאפּוֹן פּוֹ! מַאי מָאאִיפָּאגְלִילִינְגְכּוֹד פּוֹ בָּא אָקוֹ?",
       userOptions: [
         {
-          textTagalog: "Magkano po ang rent bawat araw?",
-          textHebrew: "כמה עולה השכרה ליום?",
-          textPhonetic: "מַגְקָאנוֹ פּוֹ אָנְג רֶנְט בָּאוָואת אָרָאוָו?",
-          botResponseTagalog: "400 pesos lang po bawat araw kasama ang helmet!",
-          botResponseHebrew: "400 פסו ליום בלבד כולל קסדות!",
-          botResponsePhonetic: "400 פֶּסוֹס לָאנְג פּוֹ בָּאוָואת אָרָאוָו כָּאסָאמָא אָנְג הֶלְמֶת!",
-          xpReward: 30
-        },
-        {
-          textTagalog: "Kasama na po ba ang dalawang helmet at surf rack?",
-          textHebrew: "האם זה כולל שתי קסדות ומתקן לגלשן?",
-          textPhonetic: "כָּאסָאמָא נָא פּוֹ בָּא אָנְג דָאלָאוָואנְג הֶלְמֶת אָאת סֶרְף רָאכּ?",
-          botResponseTagalog: "Opo! Nakakabit na ang surf rack. Ingat sa pagmamaneho!",
-          botResponseHebrew: "כן! מתקן הגלשנים מורכב. נסיעה בטוחה!",
-          botResponsePhonetic: "אוֹפּוֹ! נָאכָּאכָּאבִּית נָא אָנְג סֶרְף רָאכּ. אִין-גָאת סָא פָּאגְמָאמָאנֶה-הוֹ!",
-          xpReward: 35
+          textTagalog: "Magkano po ito?",
+          textHebrew: "כמה זה עולה?",
+          textPhonetic: "מַגְקָאנוֹ פּוֹ אִיתוֹ?",
+          botResponseTagalog: "50 pesos lang po iyan, sir!",
+          botResponseHebrew: "50 פסו בלבד, אדוני!",
+          botResponsePhonetic: "50 פֶּסוֹס לָאנְג פּוֹ אִיָאן, סֶר!",
+          xpReward: 25
         }
       ]
     },
     {
       id: "sc_05",
-      titleHebrew: "סיור שיוט בסירות (Coron Island Hopping)",
-      icon: "⛵",
-      locationTagalog: "Coron Town, Palawan",
-      descriptionHebrew: "צאו לשיוט בסירת בנגקה (Bangka) בין אגמים ולגונות קסומות",
-      initialMessageTagalog: "Good morning! Handa na ba kayo sa Island Hopping Tour ngayon?",
-      initialMessageHebrew: "בוקר טוב! מוכנים לסיור האיים היום?",
-      initialMessagePhonetic: "גוּד מוֹרְנִינְג! הָאנְדָא נָא בָּא כָּאיָוֹ סָא אָאיְלֶנְד הָאפִּינְג תוּר נְגָאיון?",
+      titleHebrew: "שאילת מיקום השירותים / מלון",
+      icon: "📍",
+      locationTagalog: "שאילת הכוונה ברחוב",
+      descriptionHebrew: "שאלה קצרה על מיקום השירותים או המלון הקרוב",
+      initialMessageTagalog: "Excuse me po, saan po ang banyo?",
+      initialMessageHebrew: "סליחה, איפה השירותים בבקשה?",
+      initialMessagePhonetic: "אֶכְסְכְּיוּז מִי פּוֹ, סָאַאן פּוֹ אָנְג בָּאנְיוֹ?",
       userOptions: [
         {
-          textTagalog: "Opo! Saan po ang unang pupuntahan natin?",
-          textHebrew: "כן! לאן נוסעים קודם?",
-          textPhonetic: "אוֹפּוֹ! סָאַאן פּוֹ אָנְג אוּנָאנְג פּוּפּוּנְתָּה-הָאן נָאתִין?",
-          botResponseTagalog: "Pupunta tayo sa Kayangan Lake at Twin Lagoon!",
-          botResponseHebrew: "נוסעים קודם לאגם קאיאנגאן וללגונה התאומה!",
-          botResponsePhonetic: "פּוּפּוּנְתָּה תָּאיָוֹ סָא כָּאיָאנְגָאן לֵייכּ אָאת תְּוִוין לָאגוּן!",
-          xpReward: 35
-        },
-        {
-          textTagalog: "May kasama po bang masarap na tanghalian?",
-          textHebrew: "האם יש ארוחת צהריים טעימה כלולה?",
-          textPhonetic: "מַאי כָּאסָאמָא פּוֹ בָּא נָא מַסָארָאפְּ נָא תָּאנְג-הָאלִי-יָאן?",
-          botResponseTagalog: "Opo! Magluluto kami ng inihaw na isda at mangga sa beach!",
-          botResponseHebrew: "כן! נבשל דגים על האש ומנגו טרי בחוף!",
-          botResponsePhonetic: "אוֹפּוֹ! מַגְלוּלוּתוֹ כָּאמִי נְג אִין-אִיחָאוָו נָא אִירְדָא אָאת מַאנְג-גָא סָא בִּיץ'!",
-          xpReward: 40
-        }
-      ]
-    },
-    {
-      id: "sc_06",
-      titleHebrew: "מפגש והכרות עם מקומיים (Boracay Beach Cafe)",
-      icon: "☕",
-      locationTagalog: "Station 2, Boracay",
-      descriptionHebrew: "ערכו שיחת היכרות קולחת עם חברים פיליפינים על החוף",
-      initialMessageTagalog: "Hi! Bago ka lang ba dito sa Boracay? Kumusta ang biyahe mo?",
-      initialMessageHebrew: "היי! אתה חדש כאן בבורקאי? איך הטיול שלך עד כה?",
-      initialMessagePhonetic: "הַאי! בָּאגוֹ כָּה לָאנְג בָּא דִיטוֹ סָא בּוֹרָאכָּאי? קוּמוּסְטָה אָנְג בִּייָאהֶה מוֹ?",
-      userOptions: [
-        {
-          textTagalog: "Ako si Dan mula sa Israel. Masarap at maganda dito!",
-          textHebrew: "אני דן מישראל. טעים ויפהפה פה מאוד!",
-          textPhonetic: "אָקוֹ סִי דָאן מוּלָא סָא אִישְׂרָאֵל. מַסָארָאפְּ אָאת מָאגָאנְדָא דִיטוֹ!",
-          botResponseTagalog: "Wow! Welcome sa Pilipinas, kaibigan! Tara, kape tayo!",
-          botResponseHebrew: "וואו! ברוך הבא לפיליפינים, חבר! בוא נשתה קפה יחד!",
-          botResponsePhonetic: "וָואוֹ! װֶלְכָּאם סָא פִּילִיפִּינָאס, כָּאאִיבִֿיגַאן! תָּארָא, כָּאפֶּה תָּאיָוֹ!",
-          xpReward: 45
+          textTagalog: "Saan po ang banyo dito?",
+          textHebrew: "איפה השירותים כאן?",
+          textPhonetic: "סָאַאן פּוֹ אָנְג בָּאנְיוֹ דִיטוֹ?",
+          botResponseTagalog: "Dito po sa kanan, katabi ng pinto!",
+          botResponseHebrew: "כאן מימין, ליד הדלת!",
+          botResponsePhonetic: "דִיטוֹ פּוֹ סָא כָּאנָאן, כָּאתָאבִּי נְג פִּין-תוֹ!",
+          xpReward: 25
         }
       ]
     }
